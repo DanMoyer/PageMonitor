@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Pages]
+(
+	[Id]		INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[Url]		NVARCHAR(200) NOT NULL,
+	[Monitor]	BIT NOT NULL
+)
