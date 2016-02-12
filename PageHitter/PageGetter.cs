@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PageHitter
 {
 	public class PageGetter
 	{
-
 		public async Task<PageStats> HTTP_GET(PageStats pageStats)
 		{
 			try
@@ -52,8 +48,5 @@ namespace PageHitter
 				return pageStats;
 			}
 		}
-
-
-
 	}
 }

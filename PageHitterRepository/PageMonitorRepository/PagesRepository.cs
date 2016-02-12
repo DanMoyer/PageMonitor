@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PageMonitorRepository
 {
@@ -11,13 +8,13 @@ namespace PageMonitorRepository
 
 		public List<Page> GetAllMonitor()
 		{
-			return DbSet.Where(r => r.Monitor == true).ToList();
+			return DbSet.Where(r => r.Monitor).ToList();
 		}
 
 		public List<Page> GetAllProdMonitor()
 		{
 			var recs = DbSet
-						.Where(r => r.Monitor == true && !r.Url.Contains("stg"))
+						.Where(r => r.Monitor && !r.Url.Contains("stg"))
 						.ToList();
 
 
@@ -29,7 +26,7 @@ namespace PageMonitorRepository
 		public List<Page> GetAllStgMonitor()
 		{
 			var recs = DbSet
-						.Where(r => r.Monitor == true && r.Url.Contains("stg"))
+						.Where(r => r.Monitor && r.Url.Contains("stg"))
 						.ToList();
 
 			return recs;

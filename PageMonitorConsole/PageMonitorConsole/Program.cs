@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using PageHitter;
@@ -11,7 +10,22 @@ namespace PageMonitorConsole
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
+		{
+			//DirectAccess();
+
+			const string url = "http://localhost:9476/api/Values/?json=true";
+
+			var msg = WebServiceAccess(url).Result;
+
+			Console.WriteLine(msg);
+			Console.WriteLine("complete");
+
+			//Console.ReadLine();
+
+		}
+
+		private static void DirectAccess()
 		{
 			var repoPages = new PagesRepository();
 			//var pages = repoPages.GetAllProdMonitor();
@@ -53,6 +67,24 @@ namespace PageMonitorConsole
 				Thread.Sleep(10000);
 
 				counter--;
+			}
+		}
+
+		private static async Task<string> WebServiceAccess(string url)
+		{
+			try
+			{
+				var client = new HttpClient();
+
+				var responseMessage = await client.GetAsync(url);
+				var message = await responseMessage.Content.ReadAsStringAsync();
+
+				return message;
+			}
+			catch (Exception ex)
+			{
+				var msg = ex.Message;
+				return msg;
 			}
 		}
 	}
