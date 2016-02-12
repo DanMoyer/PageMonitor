@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using PageHitter;
-using PageMonitor.Repository;
+using PageMonitorRepository;
 
-namespace PageMonitor
+namespace PageMonitorConsole
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-
 			var repoPages = new PagesRepository();
 			//var pages = repoPages.GetAllProdMonitor();
 			var pages = repoPages.GetAllStgMonitor();
@@ -32,24 +35,24 @@ namespace PageMonitor
 
 					var pageStatus = new PageStatus
 					{
-						Url              = stats.Url,
-						ResponseTime     = stats.ResponseTime,
-						ContentLength    = stats.ContentLength,
+						Url = stats.Url,
+						ResponseTime = stats.ResponseTime,
+						ContentLength = stats.ContentLength,
 						ExceptionMessage = stats.ExceptionMessage,
-						Status           = stats.Status.ToString(),
-						Created          = DateTime.Now
+						Status = stats.Status.ToString(),
+						Created = DateTime.Now
 					};
 
 					repoPageStatus.Add(pageStatus);
 					repoPageStatus.SaveChanges();
 
-					Console.WriteLine($"seconds: {stats.ResponseTime}  length: {stats.ContentLength} time: {DateTime.Now}"  );
+					Console.WriteLine($"seconds: {stats.ResponseTime}  length: {stats.ContentLength} time: {DateTime.Now}");
 					Console.WriteLine();
 				}
 
 				Thread.Sleep(10000);
 
-				counter --;
+				counter--;
 			}
 		}
 	}

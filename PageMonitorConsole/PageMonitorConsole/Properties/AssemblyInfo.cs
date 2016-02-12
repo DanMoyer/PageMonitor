@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PageMonitor")]
+[assembly: AssemblyTitle("PageMonitorConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PageMonitor")]
+[assembly: AssemblyProduct("PageMonitorConsole")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f471d55a-a6a1-448f-bdb8-25de72efb2eb")]
+[assembly: Guid("9168a8cb-09e5-467f-8a1e-e96349c8e219")]
 
 // Version information for an assembly consists of the following four values:
 //
