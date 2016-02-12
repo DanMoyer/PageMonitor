@@ -14,15 +14,14 @@ namespace PageMonitorConsole
 		{
 			//DirectAccess();
 
-			const string url = "http://localhost:9476/api/Values/?json=true";
+			const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
+			//const string url = "http://localhost:9476/api/Values/?json=true";
 
 			var msg = WebServiceAccess(url).Result;
 
-			Console.WriteLine(msg);
-			Console.WriteLine("complete");
-
+			//Console.WriteLine(msg);
+			//Console.WriteLine("complete");
 			//Console.ReadLine();
-
 		}
 
 		private static void DirectAccess()
