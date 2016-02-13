@@ -19,7 +19,7 @@ namespace PageMonitorConsole
 
 			var msg = WebServiceAccess(url).Result;
 
-			//Console.WriteLine(msg);
+			Console.WriteLine(msg);
 			//Console.WriteLine("complete");
 			//Console.ReadLine();
 		}
