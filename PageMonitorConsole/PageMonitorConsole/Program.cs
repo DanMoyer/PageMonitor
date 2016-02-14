@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 using PageHitter;
 using PageMonitorRepository;
 
+
+/*
+   http://blog.amitapple.com/post/2015/06/scheduling-azure-webjobs/#.Vr-aumbSl9A
+   https://azure.microsoft.com/en-us/documentation/articles/web-sites-create-web-jobs/#CreateScheduledCRON
+   https://azure.microsoft.com/en-us/documentation/articles/websites-dotnet-deploy-webjobs/
+
+*/
+
 namespace PageMonitorConsole
 {
 	class Program
@@ -17,9 +25,17 @@ namespace PageMonitorConsole
 			const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
 			//const string url = "http://localhost:9476/api/Values/?json=true";
 
-			var msg = WebServiceAccess(url).Result;
 
-			Console.WriteLine(msg);
+			while (true)
+			{
+				var msg = WebServiceAccess(url).Result;
+
+				//Console.WriteLine(msg);
+
+				var sleepTime = new TimeSpan(0, 0, 1, 0);  //1 min
+				Thread.Sleep(sleepTime);  
+			}			
+			
 			//Console.WriteLine("complete");
 			//Console.ReadLine();
 		}
