@@ -23,7 +23,9 @@ namespace PageMonitorConsole
 
 			//const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
 			//const string url = "http://localhost:9476/api/Values/?html=false&page=https://www.findlay.edu";
-			const string url = "http://localhost:9476/api/Values/?html=false&page=";
+
+			//const string url = "http://localhost:9476/api/Values/?html=false&page=";
+			const string url = "http://pagehitterweb.azurewebsites.net/api/Values?html=false&page=";
 
 			//const string url = "http://localhost:9476/api/Values/?json=true";
 
@@ -42,11 +44,11 @@ namespace PageMonitorConsole
 						foreach (var page in pages)
 						{
 							var msg = WebServiceAccess(url + page.Url, interPageSleepTime).Result;
-							Console.WriteLine(msg);
+							//Console.WriteLine(msg);
 						}
 
 						//Sleep before hitting collection of pages again
-						Console.WriteLine($"Sleeping {delay.IterationMinute} minutes {delay.IterationSecond} seconds  pageDelay: {delay.PageSecond}");
+						//Console.WriteLine($"Sleeping {delay.IterationMinute} minutes {delay.IterationSecond} seconds  pageDelay: {delay.PageSecond}");
 						var sleepTime = new TimeSpan(0, delay.IterationHour, delay.IterationMinute, delay.IterationSecond);  //1 min
 						Thread.Sleep(sleepTime);
 					} 

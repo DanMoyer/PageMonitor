@@ -21,14 +21,28 @@ namespace PageHitterWeb.Controllers
 	        {
 		        var pageStatuses = pageStatusRepository.GetPageStatuses();
 
+		        var timeZoneId = "Eastern Standard Time";
+		        var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+
+
 		        foreach (var pageStatus in pageStatuses)
 		        {
+			        var utcTime = new DateTime(
+						pageStatus.Created.Year, 
+						pageStatus.Created.Month, 
+						pageStatus.Created.Day, 
+						pageStatus.Created.Hour, 
+						pageStatus.Created.Minute, 
+						pageStatus.Created.Second);
+
+			        var easterTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
+
 			        listPageResponseModel.Add(
 						new PageResponseModel
 						{
 							Url          = pageStatus.Url,
 							ResponseTime = pageStatus.ResponseTime,
-							Created      = pageStatus.Created
+							Created      = easterTime
 						});
 		        }
 	        }

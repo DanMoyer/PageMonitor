@@ -236,6 +236,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdHocTestController.cs" />
     <Compile Include="Controllers\DelayAdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PageAdminController.cs" />
@@ -335,6 +336,7 @@
     <Content Include="Views\PageAdmin\Create.cshtml" />
     <Content Include="Views\PageAdmin\Edit.cshtml" />
     <Content Include="Views\PageAdmin\Delete.cshtml" />
+    <Content Include="Views\AdHocTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
