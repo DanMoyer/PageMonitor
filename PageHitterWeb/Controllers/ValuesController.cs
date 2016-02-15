@@ -25,9 +25,24 @@ namespace PageHitterWeb.Controllers
 		// GET api/values
 		//public async Task<IEnumerable<PageResponseModel>> Get()
 		//public async Task<JsonResult<List<PageResponseModel>>> Get()
-		public async Task<object> Get(bool html = false)
+
+		//http://localhost:9476/api/Values/true/foo					with Route attribute
+		//http://localhost:9476/api/Values/?html=true&page=foobar   without route attribute
+
+		//[Route("api/Values/{html}/{page}")]
+		public async Task<object> Get(bool html = false, string page = "")
 		{
-			var listPageStatus = await HitPages(1);
+			// ReSharper disable once RedundantAssignment
+			IEnumerable<PageStatus> listPageStatus = new List<PageStatus>();
+
+			if (string.IsNullOrEmpty(page))
+			{
+				listPageStatus = await HitPages();
+			}
+			else
+			{
+				listPageStatus = await HitPage(page);
+			}
 
 			var pageStatuses = listPageStatus as IList<PageStatus> ?? listPageStatus.ToList();
 			var listPageResponse = GetPageResponses(pageStatuses.ToList());
@@ -67,49 +82,88 @@ namespace PageHitterWeb.Controllers
 		}
 
 
-		private async Task<IEnumerable<PageStatus>> HitPages(int count)
+		private static async Task<IEnumerable<PageStatus>> HitPages()
 		{
-			var repoPages = new PagesRepository();
-			var pages = repoPages.GetAllProdMonitor();
-			//var pages = repoPages.GetAllStgMonitor();
+			var listPageStatus = new List<PageStatus>();
 
-			var repoPageStatus = new PageStatusRepository();
-
-			var pageGetter = new PageGetter();
-
-			var counter = count;
-
-			var pageStati = new List<PageStatus>();
-
-			while (counter > 0)
+			try
 			{
+				var repoPages = new PagesRepository();
+				var pages = repoPages.GetAllProdMonitor();
+				//var pages = repoPages.GetAllStgMonitor();
+
+				var repoPageStatus = new PageStatusRepository();
+
+				var pageGetter = new PageGetter();
+
 				foreach (var page in pages)
 				{
 					var pageStats = new PageStats {Url = page.Url};
-					var stats = await pageGetter.HTTP_GET(pageStats);
-					//var stats = result.Result;
+					var stats     = await pageGetter.HTTP_GET(pageStats);
 
 					var pageStatus = new PageStatus
 					{
-						Url = stats.Url,
-						ResponseTime = stats.ResponseTime,
-						ContentLength = stats.ContentLength,
+						Url              = stats.Url,
+						ResponseTime     = stats.ResponseTime,
+						ContentLength    = stats.ContentLength,
 						ExceptionMessage = stats.ExceptionMessage,
-						Status = stats.Status.ToString(),
-						Created = DateTime.Now
+						Status           = stats.Status.ToString(),
+						Created          = DateTime.Now
 					};
 
 					repoPageStatus.Add(pageStatus);
 					repoPageStatus.SaveChanges();
 
-					pageStati.Add(pageStatus);
+					listPageStatus.Add(pageStatus);
 				}
-
-				counter--;
+			}
+			catch (Exception ex)
+			{
+				// ReSharper disable once UnusedVariable
+				var msg = ex.Message;
 			}
 
-			return pageStati;
+			return listPageStatus;
 		}
+
+		private static async Task<IEnumerable<PageStatus>> HitPage(string pageUrl)
+		{
+			var listPageStatus = new List<PageStatus>();
+
+			try
+			{
+				var repoPageStatus = new PageStatusRepository();
+
+				var pageGetter = new PageGetter();
+
+				var pageStats = new PageStats { Url = pageUrl };
+				var stats     = await pageGetter.HTTP_GET(pageStats);
+
+				var pageStatus = new PageStatus
+				{
+					Url              = stats.Url,
+					ResponseTime     = stats.ResponseTime,
+					ContentLength    = stats.ContentLength,
+					ExceptionMessage = stats.ExceptionMessage,
+					Status           = stats.Status.ToString(),
+					Created          = DateTime.Now
+				};
+
+				repoPageStatus.Add(pageStatus);
+				repoPageStatus.SaveChanges();
+
+				listPageStatus.Add(pageStatus);
+			}
+			catch (Exception ex)
+			{
+				// ReSharper disable once UnusedVariable
+				var msg = ex.Message;
+			}
+
+			return listPageStatus;
+		}
+
+
 
 		private HttpResponseMessage GetPageData(IEnumerable<PageResponseModel> pageResponses)
 		{

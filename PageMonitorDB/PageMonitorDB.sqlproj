@@ -61,8 +61,10 @@
   <ItemGroup>
     <Build Include="Pages.sql" />
     <Build Include="PageStatus.sql" />
+    <Build Include="Delay.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InsertPages.sql" />
+    <None Include="InsertDelay.sql" />
   </ItemGroup>
 </Project>

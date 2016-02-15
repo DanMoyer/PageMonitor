@@ -51,6 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Delay.cs" />
+    <Compile Include="DelayRepository.cs" />
+    <Compile Include="Migrations\201602142108017_InitialBaseline.cs" />
+    <Compile Include="Migrations\201602142108017_InitialBaseline.Designer.cs">
+      <DependentUpon>201602142108017_InitialBaseline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PageMonitorDb.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PageMonitorRepository.cs" />
@@ -62,6 +69,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201602142108017_InitialBaseline.resx">
+      <DependentUpon>201602142108017_InitialBaseline.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

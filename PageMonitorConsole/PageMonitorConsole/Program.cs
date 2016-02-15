@@ -22,17 +22,33 @@ namespace PageMonitorConsole
 		{
 			//DirectAccess();
 
-			const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
+			//const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
+			//const string url = "http://localhost:9476/api/Values/?html=false&page=https://www.findlay.edu";
+			const string url = "http://localhost:9476/api/Values/?html=false&page=";
+
 			//const string url = "http://localhost:9476/api/Values/?json=true";
 
+			var delayRepo = new DelayRepository();
+			var repoPages = new PagesRepository();
 
 			while (true)
 			{
-				var msg = WebServiceAccess(url).Result;
+				var delay = delayRepo.GetDelay();
+				var pages = repoPages.GetAllProdMonitor();
 
-				//Console.WriteLine(msg);
+				//Hit each page from web job.
+				foreach (var page in pages)
+				{
+					var msg = WebServiceAccess(url + page.Url).Result;
+					Console.WriteLine(msg);
 
-				var sleepTime = new TimeSpan(0, 0, 1, 0);  //1 min
+					var interPageSleepTime = new TimeSpan(0, delay.PageHour, delay.PageMinute, delay.PageSecond);
+					Thread.Sleep(interPageSleepTime);
+				}
+
+				//Sleep before hitting collection of pages again
+				Console.WriteLine("Sleeping {delay.iterationMinute}  {delay.IterationSecond}");
+				var sleepTime = new TimeSpan(0, delay.IterationHour, delay.IterationMinute, delay.IterationSecond);  //1 min
 				Thread.Sleep(sleepTime);  
 			}			
 			
