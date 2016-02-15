@@ -1,15 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PageMonitorRepository
 {
-	public class PagesRepository : PageMonitorRepository<Page>
+	public class PagesRepository : PageMonitorRepository<Page>, IDisposable
 	{
 
 		public List<Page> GetAllMonitor()
 		{
 			return DbSet.Where(r => r.Monitor).ToList();
 		}
+
+		public Page GetById(int id)
+		{
+			return DbSet.FirstOrDefault(r => r.Id == id);
+		}
+
 
 		public List<Page> GetAllProdMonitor()
 		{
@@ -31,5 +38,6 @@ namespace PageMonitorRepository
 
 			return recs;
 		}
+
 	}
 }

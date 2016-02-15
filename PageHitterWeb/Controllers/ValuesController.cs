@@ -88,33 +88,37 @@ namespace PageHitterWeb.Controllers
 
 			try
 			{
-				var repoPages = new PagesRepository();
-				var pages = repoPages.GetAllProdMonitor();
-				//var pages = repoPages.GetAllStgMonitor();
-
-				var repoPageStatus = new PageStatusRepository();
-
-				var pageGetter = new PageGetter();
-
-				foreach (var page in pages)
+				using (var repoPages = new PagesRepository())
 				{
-					var pageStats = new PageStats {Url = page.Url};
-					var stats     = await pageGetter.HTTP_GET(pageStats);
-
-					var pageStatus = new PageStatus
+					using (var repoPageStatus = new PageStatusRepository())
 					{
-						Url              = stats.Url,
-						ResponseTime     = stats.ResponseTime,
-						ContentLength    = stats.ContentLength,
-						ExceptionMessage = stats.ExceptionMessage,
-						Status           = stats.Status.ToString(),
-						Created          = DateTime.Now
-					};
 
-					repoPageStatus.Add(pageStatus);
-					repoPageStatus.SaveChanges();
+						var pages = repoPages.GetAllProdMonitor();
+						//var pages = repoPages.GetAllStgMonitor();
 
-					listPageStatus.Add(pageStatus);
+						var pageGetter = new PageGetter();
+
+						foreach (var page in pages)
+						{
+							var pageStats = new PageStats { Url = page.Url };
+							var stats = await pageGetter.HTTP_GET(pageStats);
+
+							var pageStatus = new PageStatus
+							{
+								Url = stats.Url,
+								ResponseTime = stats.ResponseTime,
+								ContentLength = stats.ContentLength,
+								ExceptionMessage = stats.ExceptionMessage,
+								Status = stats.Status.ToString(),
+								Created = DateTime.Now
+							};
+
+							repoPageStatus.Add(pageStatus);
+							repoPageStatus.SaveChanges();
+
+							listPageStatus.Add(pageStatus);
+						}  
+					}
 				}
 			}
 			catch (Exception ex)
@@ -132,27 +136,28 @@ namespace PageHitterWeb.Controllers
 
 			try
 			{
-				var repoPageStatus = new PageStatusRepository();
-
-				var pageGetter = new PageGetter();
-
-				var pageStats = new PageStats { Url = pageUrl };
-				var stats     = await pageGetter.HTTP_GET(pageStats);
-
-				var pageStatus = new PageStatus
+				using (var repoPageStatus = new PageStatusRepository())
 				{
-					Url              = stats.Url,
-					ResponseTime     = stats.ResponseTime,
-					ContentLength    = stats.ContentLength,
-					ExceptionMessage = stats.ExceptionMessage,
-					Status           = stats.Status.ToString(),
-					Created          = DateTime.Now
-				};
+					var pageGetter = new PageGetter();
 
-				repoPageStatus.Add(pageStatus);
-				repoPageStatus.SaveChanges();
+					var pageStats = new PageStats { Url = pageUrl };
+					var stats = await pageGetter.HTTP_GET(pageStats);
 
-				listPageStatus.Add(pageStatus);
+					var pageStatus = new PageStatus
+					{
+						Url = stats.Url,
+						ResponseTime = stats.ResponseTime,
+						ContentLength = stats.ContentLength,
+						ExceptionMessage = stats.ExceptionMessage,
+						Status = stats.Status.ToString(),
+						Created = DateTime.Now
+					};
+
+					repoPageStatus.Add(pageStatus);
+					repoPageStatus.SaveChanges();
+
+					listPageStatus.Add(pageStatus); 
+				}
 			}
 			catch (Exception ex)
 			{

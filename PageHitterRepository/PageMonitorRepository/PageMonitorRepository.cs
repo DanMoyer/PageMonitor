@@ -46,5 +46,11 @@ namespace PageMonitorRepository
 
 			}
 		}
+		
+
+		public void Dispose()
+		{
+			_context.Dispose();
+		}
 	}
 }
