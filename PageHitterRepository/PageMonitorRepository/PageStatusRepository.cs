@@ -11,7 +11,7 @@ namespace PageMonitorRepository
 		{
 			return  DbSet.
 						OrderByDescending(r => r.Id)
-						.Take(10)
+						.Take(50)
 						.ToList();
 		}
 	}
