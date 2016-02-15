@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using PageHitter;
 using PageHitterWeb.Models;
@@ -16,8 +14,10 @@ namespace PageHitterWeb.Controllers
 		// GET: AdHocTest
 		public async Task<ActionResult> Index()
 		{
-			IEnumerable<PageStatus> listPageStatus = new List<PageStatus>();
 			var listPageResponseModels = new List<PageResponseModel>();
+
+			var timeZoneId  = "Eastern Standard Time";
+			var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 
 			using (var pagesRepository = new PagesRepository())
 			{
@@ -26,19 +26,28 @@ namespace PageHitterWeb.Controllers
 					//Hit each page from web job.
 					foreach (var page in pages)
 					{
-						listPageStatus = await HitPage(page.Url);
+						var listPageStatus = await HitPage(page.Url);
 
 						var pageStatus = listPageStatus.First();
 
-						listPageResponseModels.Add(new PageResponseModel
-						{
-							Created = pageStatus.Created,
-							Url = pageStatus.Url,
-							ResponseTime = pageStatus.ResponseTime
-							
-						});
+						var utcTime = new DateTime(
+							pageStatus.Created.Year,
+							pageStatus.Created.Month,
+							pageStatus.Created.Day,
+							pageStatus.Created.Hour,
+							pageStatus.Created.Minute,
+							pageStatus.Created.Second);
 
-						//var msg = WebServiceAccess(url + page.Url, interPageSleepTime).Result;
+						var easternTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
+
+						listPageResponseModels.Add(
+							new PageResponseModel
+							{
+								Created      = easternTime,
+								Url          = pageStatus.Url,
+								ResponseTime = pageStatus.ResponseTime
+							});
+
 					}
 			}
 

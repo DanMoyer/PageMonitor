@@ -1,33 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using PageHitterWeb.Models;
 using PageMonitorRepository;
 
 namespace PageHitterWeb.Controllers
 {
-    public class ResponseTimesController : Controller
-    {
+	public class ResponseTimesController : Controller
+	{
 
 
-        // GET: ResponseTimes/Create
-        public ActionResult ShowPageTimes()
-        {
-	        var listPageResponseModel = new List<PageResponseModel>();
+		// GET: ResponseTimes/Create
+		public ActionResult ShowPageTimes()
+		{
+			var listPageResponseModel = new List<PageResponseModel>();
 
-	        using (var pageStatusRepository = new PageStatusRepository())
-	        {
-		        var pageStatuses = pageStatusRepository.GetPageStatuses();
+			using (var pageStatusRepository = new PageStatusRepository())
+			{
+				var pageStatuses = pageStatusRepository.GetPageStatuses();
 
-		        var timeZoneId = "Eastern Standard Time";
-		        var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+				var timeZoneId  = "Eastern Standard Time";
+				var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 
 
-		        foreach (var pageStatus in pageStatuses)
-		        {
-			        var utcTime = new DateTime(
+				foreach (var pageStatus in pageStatuses)
+				{
+					var utcTime = new DateTime(
 						pageStatus.Created.Year, 
 						pageStatus.Created.Month, 
 						pageStatus.Created.Day, 
@@ -35,37 +33,37 @@ namespace PageHitterWeb.Controllers
 						pageStatus.Created.Minute, 
 						pageStatus.Created.Second);
 
-			        var easterTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
+					var easternTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
 
-			        listPageResponseModel.Add(
+					listPageResponseModel.Add(
 						new PageResponseModel
 						{
 							Url          = pageStatus.Url,
 							ResponseTime = pageStatus.ResponseTime,
-							Created      = easterTime
+							Created      = easternTime
 						});
-		        }
-	        }
+				}
+			}
 
-            return View(listPageResponseModel);
-        }
+			return View(listPageResponseModel);
+		}
 
-        // POST: ResponseTimes/Create
-        //[HttpPost]
-        //public ActionResult ShowPageTimes(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
+		// POST: ResponseTimes/Create
+		//[HttpPost]
+		//public ActionResult ShowPageTimes(FormCollection collection)
+		//{
+		//    try
+		//    {
+		//        // TODO: Add insert logic here
 
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+		//        return RedirectToAction("Index");
+		//    }
+		//    catch
+		//    {
+		//        return View();
+		//    }
+		//}
 
 
-    }
+	}
 }
