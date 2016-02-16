@@ -11,5 +11,7 @@ namespace PageMonitorRepository
 		public string Url { get; set; }
 
 		public bool Monitor { get; set; }
+
+		public bool AdHoc { get; set; }
 	}
 }

@@ -11,14 +11,17 @@ namespace PageMonitorRepository
 			return DbSet.Where(r => r.Monitor).ToList();
 		}
 
+		public List<Page> GetAllAdHoc()
+		{
+			return DbSet.Where(r => r.AdHoc).ToList();
+		}
+
+
 		public List<Page> GetAllProdMonitor()
 		{
 			var recs = DbSet
 						.Where(r => r.Monitor && !r.Url.Contains("stg"))
 						.ToList();
-
-
-
 
 			return recs;
 		}
