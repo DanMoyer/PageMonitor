@@ -78,7 +78,7 @@ namespace PageHitterWeb.Controllers
 				model.Id      = id;
 				model.Url     = entity.Url;
 				model.Monitor = entity.Monitor;
-
+				model.AdHoc   = entity.AdHoc;
 			}
 			
 			return View(model);
@@ -100,6 +100,7 @@ namespace PageHitterWeb.Controllers
 
 					entity.Url     = model.Url;
 					entity.Monitor = model.Monitor;
+					entity.AdHoc   = model.AdHoc;
 
 					repo.SaveChanges();
 				}
@@ -125,6 +126,7 @@ namespace PageHitterWeb.Controllers
 				model.Id      = id;
 				model.Url     = entity.Url;
 				model.Monitor = entity.Monitor;
+				model.AdHoc   = entity.AdHoc;
 
 			}
 
