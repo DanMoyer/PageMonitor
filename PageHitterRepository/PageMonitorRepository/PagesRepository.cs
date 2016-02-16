@@ -11,10 +11,11 @@ namespace PageMonitorRepository
 			return DbSet.Where(r => r.Monitor).ToList();
 		}
 
-		public Page GetById(int id)
+		public List<Page> GetAllAdHoc()
 		{
-			return DbSet.FirstOrDefault(r => r.Id == id);
+			return DbSet.Where(r => r.AdHoc).ToList();
 		}
+
 
 		public List<Page> GetAllProdMonitor()
 		{
