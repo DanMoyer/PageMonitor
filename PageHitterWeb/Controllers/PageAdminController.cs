@@ -21,7 +21,8 @@ namespace PageHitterWeb.Controllers
 				{
 					Id      = page.Id,
 					Url     = page.Url,
-					Monitor = page.Monitor
+					Monitor = page.Monitor,
+					AdHoc   = page.AdHoc
 				}));
 			}
 
@@ -49,7 +50,7 @@ namespace PageHitterWeb.Controllers
 				var model = new PageModel();
 				UpdateModel(model);
 				
-				var entity = new Page {Monitor = model.Monitor, Url = model.Url};
+				var entity = new Page {Monitor = model.Monitor, AdHoc = model.AdHoc, Url = model.Url};
 
 				using (var repo = new PagesRepository())
 				{

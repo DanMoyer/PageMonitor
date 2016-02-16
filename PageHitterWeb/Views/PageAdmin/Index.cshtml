@@ -17,6 +17,10 @@
         <th>
             @Html.DisplayNameFor(model => model.Monitor)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdHoc)
+        </th>
+
         <th></th>
     </tr>
 
@@ -28,6 +32,10 @@
         <td>
             @Html.DisplayFor(modelItem => item.Monitor)
         </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdHoc)
+        </td>
+
         <td>
             @Html.ActionLink("Edit", "Edit", new {  id=item.Id }) |
             @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@

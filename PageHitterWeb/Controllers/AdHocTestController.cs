@@ -21,7 +21,7 @@ namespace PageHitterWeb.Controllers
 
 			using (var pagesRepository = new PagesRepository())
 			{
-					var pages = pagesRepository.GetAllProdMonitor();
+					var pages = pagesRepository.GetAllAdHoc();
 
 					//Hit each page from web job.
 					foreach (var page in pages)
