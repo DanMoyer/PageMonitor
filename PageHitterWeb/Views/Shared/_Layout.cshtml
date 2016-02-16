@@ -21,7 +21,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    @*<li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>*@
+                    <li>@Html.ActionLink("PageTimes", "ShowPageTimes", "ResponseTimes", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("DelayAdmin", "Edit", "DelayAdmin", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("PageAdmin", "Index", "PageAdmin", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("AdHocTest", "Index", "AdHocTest", new { area = "" }, null)</li>
                 </ul>
             </div>
         </div>
@@ -30,7 +34,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Page Monitor Application</p>
         </footer>
     </div>
 

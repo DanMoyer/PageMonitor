@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,32 +23,36 @@ namespace PageMonitorConsole
 
 			//const string url = "http://pagehitterweb.azurewebsites.net/api/Values";
 			//const string url = "http://localhost:9476/api/Values/?html=false&page=https://www.findlay.edu";
-			const string url = "http://localhost:9476/api/Values/?html=false&page=";
+
+			//const string url = "http://localhost:9476/api/Values/?html=false&page=";
+			const string url = "http://pagehitterweb.azurewebsites.net/api/Values?html=false&page=";
 
 			//const string url = "http://localhost:9476/api/Values/?json=true";
 
-			var delayRepo = new DelayRepository();
-			var repoPages = new PagesRepository();
-
 			while (true)
 			{
-				var delay = delayRepo.GetDelay();
-				var pages = repoPages.GetAllProdMonitor();
-
-				//Hit each page from web job.
-				foreach (var page in pages)
+				using (var pagesRepository = new PagesRepository())
 				{
-					var msg = WebServiceAccess(url + page.Url).Result;
-					Console.WriteLine(msg);
+					using (var delayRepository = new DelayRepository())
+					{
+						var delay = delayRepository.GetDelay();
+						var pages = pagesRepository.GetAllProdMonitor();
 
-					var interPageSleepTime = new TimeSpan(0, delay.PageHour, delay.PageMinute, delay.PageSecond);
-					Thread.Sleep(interPageSleepTime);
+						var interPageSleepTime = new TimeSpan(0, delay.PageHour, delay.PageMinute, delay.PageSecond);
+
+						//Hit each page from web job.
+						foreach (var page in pages)
+						{
+							var msg = WebServiceAccess(url + page.Url, interPageSleepTime).Result;
+							//Console.WriteLine(msg);
+						}
+
+						//Sleep before hitting collection of pages again
+						//Console.WriteLine($"Sleeping {delay.IterationMinute} minutes {delay.IterationSecond} seconds  pageDelay: {delay.PageSecond}");
+						var sleepTime = new TimeSpan(0, delay.IterationHour, delay.IterationMinute, delay.IterationSecond);  //1 min
+						Thread.Sleep(sleepTime);
+					} 
 				}
-
-				//Sleep before hitting collection of pages again
-				Console.WriteLine("Sleeping {delay.iterationMinute}  {delay.IterationSecond}");
-				var sleepTime = new TimeSpan(0, delay.IterationHour, delay.IterationMinute, delay.IterationSecond);  //1 min
-				Thread.Sleep(sleepTime);  
 			}			
 			
 			//Console.WriteLine("complete");
@@ -101,7 +104,7 @@ namespace PageMonitorConsole
 			}
 		}
 
-		private static async Task<string> WebServiceAccess(string url)
+		private static async Task<string> WebServiceAccess(string url, TimeSpan timeSpan)
 		{
 			try
 			{
@@ -109,6 +112,8 @@ namespace PageMonitorConsole
 
 				var responseMessage = await client.GetAsync(url);
 				var message = await responseMessage.Content.ReadAsStringAsync();
+
+				await Task.Delay(timeSpan);
 
 				return message;
 			}
