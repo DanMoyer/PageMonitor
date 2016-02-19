@@ -16,6 +16,12 @@ namespace PageMonitorRepository
 
 		public virtual DbSet<Delay> Delays { get; set; }
 
+
+		public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+		public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+
+
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 		}

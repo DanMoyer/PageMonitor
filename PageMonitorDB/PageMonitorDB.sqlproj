@@ -62,6 +62,11 @@
     <Build Include="Pages.sql" />
     <Build Include="PageStatus.sql" />
     <Build Include="Delay.sql" />
+    <Build Include="AspNetRoles.sql" />
+    <Build Include="AspNetUserClaims.sql" />
+    <Build Include="AspNetUserLogins.sql" />
+    <Build Include="AspNetUserRoles.sql" />
+    <Build Include="AspNetUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InsertPages.sql" />

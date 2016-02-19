@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspNetRole.cs" />
+    <Compile Include="AspNetUser.cs" />
     <Compile Include="Delay.cs" />
     <Compile Include="DelayRepository.cs" />
     <Compile Include="Migrations\201602142108017_InitialBaseline.cs" />
