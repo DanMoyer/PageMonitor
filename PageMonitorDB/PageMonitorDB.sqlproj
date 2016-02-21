@@ -67,6 +67,8 @@
     <Build Include="AspNetUserLogins.sql" />
     <Build Include="AspNetUserRoles.sql" />
     <Build Include="AspNetUsers.sql" />
+    <Build Include="AdHocPages.sql" />
+    <Build Include="AdHocPageStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InsertPages.sql" />

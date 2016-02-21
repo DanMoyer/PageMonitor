@@ -1,25 +1,22 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "MvcAccount", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-
             @{  var isAdmin = HttpContext.Current.User.IsInRole("admin");
-                var isSecurityAdmin = HttpContext.Current.User.IsInRole("securityadmin");
 
                 if (isAdmin)
                 {
-                    <li>@Html.ActionLink("ITS Admin", "Index", "ItsAdmin")</li>
-}
+                    <li>@Html.ActionLink("DelayAdmin", "Edit", "DelayAdmin", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("PageAdmin", "Index", "PageAdmin", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("AdHocPageAdmin", "Index", "AdHocPageAdmin", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("AdHocTest", "Index", "AdHocTest", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("ChangePassword", "ChangeAdminPassword", "MvcAccount", new { area = "" }, null)</li>
 
-
-                if (isSecurityAdmin)
-                {
-                    <li>@Html.ActionLink("Security Admin", "Index", "SecureAdminStudent")</li>
-}
+                }
             }
 
             <li>
@@ -29,18 +26,17 @@
 
                     @Html.ActionLink(shortName, "Index", "Home")
                 }
-
             </li>
-
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>
-                        }
-                    }
-                    else
-                    {
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-                        </ul>}
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Log in", "Login", "MvcAccount", routeValues: null, htmlAttributes: new {id = "loginLink"})</li>
+    </ul>
+}
 
 @*
     <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>

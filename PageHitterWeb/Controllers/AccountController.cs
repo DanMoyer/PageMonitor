@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -7,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -16,11 +20,12 @@ using Microsoft.Owin.Security.OAuth;
 using PageHitterWeb.Models;
 using PageHitterWeb.Providers;
 using PageHitterWeb.Results;
+using PageMonitorRepository;
 
 namespace PageHitterWeb.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/Account")]
+    [System.Web.Http.Authorize]
+    [System.Web.Http.RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -53,7 +58,7 @@ namespace PageHitterWeb.Controllers
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("UserInfo")]
+        [System.Web.Http.Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
@@ -67,55 +72,59 @@ namespace PageHitterWeb.Controllers
         }
 
         // POST api/Account/Logout
-        [Route("Logout")]
+        [System.Web.Http.Route("Logout")]
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
 
-        // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
-        [Route("ManageInfo")]
-        public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
-        {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+		// GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
+		//[Route("ManageInfo")]
+		//public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
+		//{
+		//    IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            if (user == null)
-            {
-                return null;
-            }
+		//    if (user == null)
+		//    {
+		//        return null;
+		//    }
 
-            List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
+		//    List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
 
-            foreach (IdentityUserLogin linkedAccount in user.Logins)
-            {
-                logins.Add(new UserLoginInfoViewModel
-                {
-                    LoginProvider = linkedAccount.LoginProvider,
-                    ProviderKey = linkedAccount.ProviderKey
-                });
-            }
+		//    foreach (IdentityUserLogin linkedAccount in user.Logins)
+		//    {
+		//        logins.Add(new UserLoginInfoViewModel
+		//        {
+		//            LoginProvider = linkedAccount.LoginProvider,
+		//            ProviderKey = linkedAccount.ProviderKey
+		//        });
+		//    }
 
-            if (user.PasswordHash != null)
-            {
-                logins.Add(new UserLoginInfoViewModel
-                {
-                    LoginProvider = LocalLoginProvider,
-                    ProviderKey = user.UserName,
-                });
-            }
+		//    if (user.PasswordHash != null)
+		//    {
+		//        logins.Add(new UserLoginInfoViewModel
+		//        {
+		//            LoginProvider = LocalLoginProvider,
+		//            ProviderKey = user.UserName,
+		//        });
+		//    }
 
-            return new ManageInfoViewModel
-            {
-                LocalLoginProvider = LocalLoginProvider,
-                Email = user.UserName,
-                Logins = logins,
-                ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
-            };
-        }
+		//    return new ManageInfoViewModel
+		//    {
+		//        LocalLoginProvider = LocalLoginProvider,
+		//        Email = user.UserName,
+		//        Logins = logins,
+		//        ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
+		//    };
+		//}
 
-        // POST api/Account/ChangePassword
-        [Route("ChangePassword")]
+
+
+
+
+		// POST api/Account/ChangePassword
+		[System.Web.Http.Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -135,7 +144,7 @@ namespace PageHitterWeb.Controllers
         }
 
         // POST api/Account/SetPassword
-        [Route("SetPassword")]
+        [System.Web.Http.Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -154,7 +163,7 @@ namespace PageHitterWeb.Controllers
         }
 
         // POST api/Account/AddExternalLogin
-        [Route("AddExternalLogin")]
+        [System.Web.Http.Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -192,7 +201,7 @@ namespace PageHitterWeb.Controllers
         }
 
         // POST api/Account/RemoveLogin
-        [Route("RemoveLogin")]
+        [System.Web.Http.Route("RemoveLogin")]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -221,10 +230,10 @@ namespace PageHitterWeb.Controllers
         }
 
         // GET api/Account/ExternalLogin
-        [OverrideAuthentication]
+        [System.Web.Http.OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        [AllowAnonymous]
-        [Route("ExternalLogin", Name = "ExternalLogin")]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
             if (error != null)
@@ -258,11 +267,9 @@ namespace PageHitterWeb.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    CookieAuthenticationDefaults.AuthenticationType);
+
+	            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager); //, OAuthDefaults.AuthenticationType);
+	            ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager); //, CookieAuthenticationDefaults.AuthenticationType);
 
                 AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
@@ -278,49 +285,49 @@ namespace PageHitterWeb.Controllers
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
-        [AllowAnonymous]
-        [Route("ExternalLogins")]
-        public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
-        {
-            IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
-            List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
+        //[AllowAnonymous]
+        //[Route("ExternalLogins")]
+        //public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
+        //{
+        //    IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
+        //    List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
 
-            string state;
+        //    string state;
 
-            if (generateState)
-            {
-                const int strengthInBits = 256;
-                state = RandomOAuthStateGenerator.Generate(strengthInBits);
-            }
-            else
-            {
-                state = null;
-            }
+        //    if (generateState)
+        //    {
+        //        const int strengthInBits = 256;
+        //        state = RandomOAuthStateGenerator.Generate(strengthInBits);
+        //    }
+        //    else
+        //    {
+        //        state = null;
+        //    }
 
-            foreach (AuthenticationDescription description in descriptions)
-            {
-                ExternalLoginViewModel login = new ExternalLoginViewModel
-                {
-                    Name = description.Caption,
-                    Url = Url.Route("ExternalLogin", new
-                    {
-                        provider = description.AuthenticationType,
-                        response_type = "token",
-                        client_id = Startup.PublicClientId,
-                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
-                        state = state
-                    }),
-                    State = state
-                };
-                logins.Add(login);
-            }
+        //    foreach (AuthenticationDescription description in descriptions)
+        //    {
+        //        ExternalLoginViewModel login = new ExternalLoginViewModel
+        //        {
+        //            Name = description.Caption,
+        //            Url = Url.Route("ExternalLogin", new
+        //            {
+        //                provider = description.AuthenticationType,
+        //                response_type = "token",
+        //                client_id = Startup.PublicClientId,
+        //                redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
+        //                state = state
+        //            }),
+        //            State = state
+        //        };
+        //        logins.Add(login);
+        //    }
 
-            return logins;
-        }
+        //    return logins;
+        //}
 
         // POST api/Account/Register
-        [AllowAnonymous]
-        [Route("Register")]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -341,9 +348,9 @@ namespace PageHitterWeb.Controllers
         }
 
         // POST api/Account/RegisterExternal
-        [OverrideAuthentication]
+        [System.Web.Http.OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("RegisterExternal")]
+        [System.Web.Http.Route("RegisterExternal")]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)

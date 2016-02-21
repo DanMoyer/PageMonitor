@@ -1,4 +1,5 @@
-﻿<div class="jumbotron">
+﻿@using Microsoft.AspNet.Identity
+<div class="jumbotron">
     <h1>University of Findlay Page Monitor</h1>
     <p class="lead">Page Monitor pings pages on the UF site and collects response times</p>
     <p>
@@ -9,16 +10,25 @@
     <div class="col-md-4">
         <h2>Getting started</h2>
         <p> Show recent page response times.</p>
-        <p><a class="btn btn-default" href="~/ResponseTimes/ShowPageTimes">Show Page Times &raquo;</a></p>
+        <p><a class="btn btn-default" href="~/ResponseTimes/ShowPageTimes">Show Page Times &raquo;</a>
+        </p>
     </div>
-    <div class="col-md-4">
-        <h2>Delay Time Admin</h2>
-        <p> Control how fast pages are monitored </p>
-        <p><a class="btn btn-default" href="~/DelayAdmin/Edit">Delay Admin &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Page Admin</h2>
-        <p> Control what pages are monitored </p>
-        <p><a class="btn btn-default" href="~/PageAdmin">Page Admin&raquo;</a></p>
-    </div>
+
+    @{  var isAdmin = HttpContext.Current.User.IsInRole("admin");
+
+        if (isAdmin)
+        {
+            <div class="col-md-4">
+                <h2>Delay Admin</h2>
+                <p> Control how fast pages are monitored </p>
+                <p><a class="btn btn-default" href="~/DelayAdmin/Edit">Delay Admin &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Page Admin</h2>
+                <p> Control what pages are monitored </p>
+                <p><a class="btn btn-default" href="~/PageAdmin">Page Admin&raquo;</a></p>
+            </div>
+
+        }
+    }
 </div>

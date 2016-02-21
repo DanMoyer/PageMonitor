@@ -1,3 +1,4 @@
+using System.Data.Entity.Core.Objects;
 using System.Reflection;
 
 namespace PageMonitorRepository
@@ -19,6 +20,9 @@ namespace PageMonitorRepository
 
 		public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 		public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+		public virtual DbSet<AdHocPage> AdHocPages { get; set; }
+		public virtual DbSet<AdHocPageStatu> AdHocPageStatus { get; set; }
 
 
 

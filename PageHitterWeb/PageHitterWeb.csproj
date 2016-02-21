@@ -236,9 +236,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdHocPageAdminController.cs" />
     <Compile Include="Controllers\AdHocTestController.cs" />
     <Compile Include="Controllers\DelayAdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MvcAccountController.cs" />
     <Compile Include="Controllers\PageAdminController.cs" />
     <Compile Include="Controllers\ResponseTimesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -246,8 +248,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\UserRoleHelper.cs" />
+    <Compile Include="Migrations\201602202348577_Test1.cs" />
+    <Compile Include="Migrations\201602202348577_Test1.Designer.cs">
+      <DependentUpon>201602202348577_Test1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AdHocPageModel.cs" />
+    <Compile Include="Models\AdminModel.cs" />
     <Compile Include="Models\DelayModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\PageModel.cs" />
@@ -314,7 +323,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -339,9 +350,31 @@
     <Content Include="Views\PageAdmin\Delete.cshtml" />
     <Content Include="Views\AdHocTest\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\MvcAccount\ConfirmEmail.cshtml" />
+    <Content Include="Views\MvcAccount\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\MvcAccount\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\MvcAccount\ForgotPassword.cshtml" />
+    <Content Include="Views\MvcAccount\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\MvcAccount\Login.cshtml" />
+    <Content Include="Views\MvcAccount\Register.cshtml" />
+    <Content Include="Views\MvcAccount\ResetPassword.cshtml" />
+    <Content Include="Views\MvcAccount\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\MvcAccount\RoleAddToUser.cshtml" />
+    <Content Include="Views\MvcAccount\RoleCreate.cshtml" />
+    <Content Include="Views\MvcAccount\RoleIndex.cshtml" />
+    <Content Include="Views\MvcAccount\SendCode.cshtml" />
+    <Content Include="Views\MvcAccount\Test.cshtml" />
+    <Content Include="Views\MvcAccount\VerifyCode.cshtml" />
+    <Content Include="Views\MvcAccount\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\MvcAccount\ChangeAdminPassword.cshtml" />
+    <Content Include="Views\AdHocPageAdmin\Index.cshtml" />
+    <Content Include="Views\AdHocPageAdmin\Create.cshtml" />
+    <Content Include="Views\AdHocPageAdmin\Edit.cshtml" />
+    <Content Include="Views\AdHocPageAdmin\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -359,6 +392,11 @@
       <Project>{d50d4371-53a4-41f5-b68a-f4c53198221e}</Project>
       <Name>PageHitter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201602202348577_Test1.resx">
+      <DependentUpon>201602202348577_Test1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

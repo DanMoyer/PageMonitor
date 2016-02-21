@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+}
+
+
+<div class="spacerBody">
+    <p>&nbsp;</p>
+
+    @Html.ActionLink("Roles", "RoleIndex") | @Html.ActionLink("Add Role to User", "RoleAddToUser")
+
+    <h2>Test</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div>
+            User name
+        </div>
+        <p>
+            @Html.TextBox("UserName")
+        </p>
+        <input type="submit" value="Test" />
+    }
+</div>

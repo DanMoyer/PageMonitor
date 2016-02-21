@@ -51,8 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdHocPage.cs" />
+    <Compile Include="AdHocPageRepository.cs" />
+    <Compile Include="AdHocPageStatu.cs" />
+    <Compile Include="AdHocPageStatusRepository.cs" />
     <Compile Include="AspNetRole.cs" />
     <Compile Include="AspNetUser.cs" />
+    <Compile Include="AspNetUserClaim.cs" />
+    <Compile Include="AspNetUserLogin.cs" />
     <Compile Include="Delay.cs" />
     <Compile Include="DelayRepository.cs" />
     <Compile Include="Migrations\201602142108017_InitialBaseline.cs" />
@@ -67,6 +73,7 @@
     <Compile Include="PageStatus.cs" />
     <Compile Include="PageStatusRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
