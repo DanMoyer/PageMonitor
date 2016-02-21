@@ -1,7 +1,7 @@
-namespace PageMonitorRepository
-{
-	using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
+namespace PageMonitorRepository.AdHoc
+{
 	public class AdHocPage
 	{
 		public short Id { get; set; }
@@ -12,6 +12,8 @@ namespace PageMonitorRepository
 
 		[Required]
 		[StringLength(128)]
-		public string UserId { get; set; }
+		public string User { get; set; }
+
+		public bool Test { get; set; }
 	}
 }

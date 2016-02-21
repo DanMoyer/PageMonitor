@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using PageHitter;
 using PageMonitorRepository;
+using PageMonitorRepository.Delay;
+using PageMonitorRepository.Monitor;
 
 
 /*

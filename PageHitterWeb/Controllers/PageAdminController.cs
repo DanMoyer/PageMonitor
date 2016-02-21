@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
+using PageMonitorRepository.Monitor;
 
 namespace PageHitterWeb.Controllers
 {
@@ -21,19 +21,12 @@ namespace PageHitterWeb.Controllers
 				{
 					Id      = page.Id,
 					Url     = page.Url,
-					Monitor = page.Monitor,
-					AdHoc   = page.AdHoc
+					Monitor = page.Monitor
 				}));
 			}
 
 			return View(models);
 		}
-
-		//GET: PageAdmin/Details/5
-		//public ActionResult Details(int id)
-		//{
-		//	return View();
-		//}
 
 		// GET: PageAdmin/Create
 		public ActionResult Create()
@@ -50,7 +43,7 @@ namespace PageHitterWeb.Controllers
 				var model = new PageModel();
 				UpdateModel(model);
 				
-				var entity = new Page {Monitor = model.Monitor, AdHoc = model.AdHoc, Url = model.Url};
+				var entity = new Page {Monitor = model.Monitor, Url = model.Url};
 
 				using (var repo = new PagesRepository())
 				{
@@ -78,7 +71,6 @@ namespace PageHitterWeb.Controllers
 				model.Id      = id;
 				model.Url     = entity.Url;
 				model.Monitor = entity.Monitor;
-				model.AdHoc   = entity.AdHoc;
 			}
 			
 			return View(model);
@@ -100,7 +92,6 @@ namespace PageHitterWeb.Controllers
 
 					entity.Url     = model.Url;
 					entity.Monitor = model.Monitor;
-					entity.AdHoc   = model.AdHoc;
 
 					repo.SaveChanges();
 				}
@@ -126,7 +117,6 @@ namespace PageHitterWeb.Controllers
 				model.Id      = id;
 				model.Url     = entity.Url;
 				model.Monitor = entity.Monitor;
-				model.AdHoc   = entity.AdHoc;
 
 			}
 

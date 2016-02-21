@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using PageHitterWeb.Models;
 using PageMonitorRepository;
+using PageMonitorRepository.Delay;
 
 namespace PageHitterWeb.Controllers
 {

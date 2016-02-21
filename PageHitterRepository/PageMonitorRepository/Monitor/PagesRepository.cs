@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PageMonitorRepository
+namespace PageMonitorRepository.Monitor
 {
 	public class PagesRepository : PageMonitorRepository<Page>, IDisposable
 	{
@@ -11,12 +11,6 @@ namespace PageMonitorRepository
 		{
 			return DbSet.Where(r => r.Monitor).ToList();
 		}
-
-		public List<Page> GetAllAdHoc()
-		{
-			return DbSet.Where(r => r.AdHoc).ToList();
-		}
-
 
 		public Page GetById(int id)
 		{

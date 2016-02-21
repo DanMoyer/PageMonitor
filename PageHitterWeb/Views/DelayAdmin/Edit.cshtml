@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Delay Times</h2>
 
 
 @using (Html.BeginForm())
@@ -12,7 +12,12 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>DelayModel</h4>
+        <p>
+            The frequency the WebJob tests the pages is the Iteration time
+        </p>
+        <p>
+            The time delay between each page hit is the Page time
+        </p>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

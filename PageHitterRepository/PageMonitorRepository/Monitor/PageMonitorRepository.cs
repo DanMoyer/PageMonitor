@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 
-namespace PageMonitorRepository
+namespace PageMonitorRepository.Monitor
 {
 	public class PageMonitorRepository<T> where T : class
 	{
@@ -24,6 +24,11 @@ namespace PageMonitorRepository
 		public void Add(T entity)
 		{
 			DbSet.Add(entity);
+		}
+
+		public void Delete(T entity)
+		{
+			DbSet.Remove(entity);
 		}
 
 		public void SaveChanges()

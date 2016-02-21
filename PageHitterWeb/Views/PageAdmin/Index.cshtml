@@ -4,8 +4,13 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Monitored Pages</h2>
 
+<p>
+    The list of pages the WebJob hits.
+    Check / Clear the Monitor checkbox to control the pages the WebJob monitors
+</p>
+<hr/>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -17,31 +22,25 @@
         <th>
             @Html.DisplayNameFor(model => model.Monitor)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AdHoc)
-        </th>
-
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Url)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Monitor)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AdHoc)
-        </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Monitor)
+            </td>
 
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {  id=item.Id }) |
-            @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-            @Html.ActionLink("Delete", "Delete", new {  id=item.Id })
-        </td>
-    </tr>
-}
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

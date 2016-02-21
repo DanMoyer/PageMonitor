@@ -1,9 +1,9 @@
-namespace PageMonitorRepository
-{
-	using System;
-	using System.ComponentModel.DataAnnotations;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-	public class AdHocPageStatu
+namespace PageMonitorRepository.Monitor
+{
+	public class PageStatus
 	{
 		public int Id { get; set; }
 
@@ -23,9 +23,5 @@ namespace PageMonitorRepository
 		public string ExceptionMessage { get; set; }
 
 		public DateTime Created { get; set; }
-
-		[Required]
-		[StringLength(128)]
-		public string UserId { get; set; }
 	}
 }

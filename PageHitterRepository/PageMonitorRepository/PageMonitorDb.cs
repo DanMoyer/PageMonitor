@@ -1,5 +1,8 @@
 using System.Data.Entity.Core.Objects;
 using System.Reflection;
+using PageMonitorRepository.AdHoc;
+using PageMonitorRepository.Identity_Pages;
+using PageMonitorRepository.Monitor;
 
 namespace PageMonitorRepository
 {
@@ -15,7 +18,7 @@ namespace PageMonitorRepository
 		public virtual DbSet<Page> Pages { get; set; }
 		public virtual DbSet<PageStatus> PageStatus { get; set; }
 
-		public virtual DbSet<Delay> Delays { get; set; }
+		public virtual DbSet<Delay.Delay> Delays { get; set; }
 
 
 		public virtual DbSet<AspNetRole> AspNetRoles { get; set; }

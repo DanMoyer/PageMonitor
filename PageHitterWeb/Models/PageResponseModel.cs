@@ -8,5 +8,7 @@ namespace PageHitterWeb.Models
 		public double ResponseTime { get; set; }
 
 		public DateTime Created { get; set; }
+
+		public string Status { get; set; }
 	}
 }

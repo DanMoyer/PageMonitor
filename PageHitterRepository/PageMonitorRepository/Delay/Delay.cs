@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace PageMonitorRepository
+namespace PageMonitorRepository.Delay
 {
 	public class Delay
 	{

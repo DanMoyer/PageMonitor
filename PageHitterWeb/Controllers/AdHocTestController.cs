@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using PageHitter;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
+using PageMonitorRepository.AdHoc;
 
 namespace PageHitterWeb.Controllers
 {
@@ -19,67 +18,92 @@ namespace PageHitterWeb.Controllers
 			var timeZoneId  = "Eastern Standard Time";
 			var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 
-			using (var pagesRepository = new PagesRepository())
+			List<AdHocPage> pages;
+			List<AdHocPageStatu> listPageStatus;
+
+			var user = UserIdentity.GetShortName(User);
+
+			using (var adHocPageRepository = new AdHocPageRepository())
 			{
-					var pages = pagesRepository.GetAllAdHoc();
-
-					//Hit each page from web job.
-					foreach (var page in pages)
-					{
-						var listPageStatus = await HitPage(page.Url);
-
-						var pageStatus = listPageStatus.First();
-
-						var utcTime = new DateTime(
-							pageStatus.Created.Year,
-							pageStatus.Created.Month,
-							pageStatus.Created.Day,
-							pageStatus.Created.Hour,
-							pageStatus.Created.Minute,
-							pageStatus.Created.Second);
-
-						var easternTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
-
-						listPageResponseModels.Add(
-							new PageResponseModel
-							{
-								Created      = easternTime,
-								Url          = pageStatus.Url,
-								ResponseTime = pageStatus.ResponseTime
-							});
-
-					}
+				pages = adHocPageRepository.GetAllPagesToTestByUser(user);
 			}
 
-			
+			//Hit each page from web job.
+			foreach (var page in pages)
+			{
+				var aPageStatus = await HitPage(page.Url, user);
+			}
+
+			using (var adHocPageStatusRepository = new AdHocPageStatusRepository())
+			{
+				listPageStatus = adHocPageStatusRepository.GetPageStatuses();
+			}
+
+			foreach (var pageStatus in listPageStatus)
+			{
+				var utcTime = new DateTime(
+											pageStatus.Created.Year,
+											pageStatus.Created.Month,
+											pageStatus.Created.Day,
+											pageStatus.Created.Hour,
+											pageStatus.Created.Minute,
+											pageStatus.Created.Second);
+
+				var easternTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, easternZone);
+
+				listPageResponseModels.Add(
+					new PageResponseModel
+					{
+						Created      = easternTime,
+						Url          = pageStatus.Url,
+						ResponseTime = pageStatus.ResponseTime,
+						Status       = pageStatus.Status
+					});
+
+
+			}
+
 			return View(listPageResponseModels);
 		}
 
-		private static async Task<IEnumerable<PageStatus>> HitPage(string pageUrl)
+		public ActionResult Delete()
 		{
-			var listPageStatus = new List<PageStatus>();
+			var user = UserIdentity.GetShortName(User);
+
+			using (var adHocPageStatusRepository = new AdHocPageStatusRepository())
+			{
+				adHocPageStatusRepository.DeleteAll(user);
+			}
+
+			return RedirectToAction("Index");
+		}
+
+		private static async Task<IEnumerable<AdHocPageStatu>> HitPage(string pageUrl, string user)
+		{
+			var listPageStatus = new List<AdHocPageStatu>();
 
 			try
 			{
-				using (var repoPageStatus = new PageStatusRepository())
+				using (var adHocPageStatusRepository = new AdHocPageStatusRepository())
 				{
 					var pageGetter = new PageGetter();
 
 					var pageStats = new PageStats { Url = pageUrl };
 					var stats = await pageGetter.HTTP_GET(pageStats);
 
-					var pageStatus = new PageStatus
+					var pageStatus = new AdHocPageStatu
 					{
 						Url              = stats.Url,
 						ResponseTime     = stats.ResponseTime,
 						ContentLength    = stats.ContentLength,
 						ExceptionMessage = stats.ExceptionMessage,
 						Status           = stats.Status.ToString(),
-						Created          = DateTime.Now
+						Created          = DateTime.Now,
+						User             = user
 					};
 
-					repoPageStatus.Add(pageStatus);
-					repoPageStatus.SaveChanges();
+					adHocPageStatusRepository.Add(pageStatus);
+					adHocPageStatusRepository.SaveChanges();
 
 					listPageStatus.Add(pageStatus);
 				}
@@ -92,7 +116,5 @@ namespace PageHitterWeb.Controllers
 
 			return listPageStatus;
 		}
-
-
 	}
 }

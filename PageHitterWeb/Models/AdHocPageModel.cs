@@ -4,7 +4,6 @@
 	{
 		public short Id { get; set; }
 		public string Url { get; set; }
-
-		public short Test { get; set; }
+		public bool Test { get; set; }
 	}
 }

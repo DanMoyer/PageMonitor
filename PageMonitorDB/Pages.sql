@@ -2,6 +2,5 @@
 (
 	[Id]		SMALLINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[Url]		NVARCHAR(200) NOT NULL,
-	[Monitor]	BIT NOT NULL,
-	[AdHoc]	    BIT NOT NULL
+	[Monitor]	BIT NOT NULL
 )

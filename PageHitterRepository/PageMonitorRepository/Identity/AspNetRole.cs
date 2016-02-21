@@ -1,8 +1,8 @@
-namespace PageMonitorRepository
-{
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
+namespace PageMonitorRepository.Identity_Pages
+{
 	public class AspNetRole
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

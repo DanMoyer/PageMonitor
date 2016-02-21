@@ -9,6 +9,7 @@ using System.Web.Http;
 using PageHitter;
 using PageHitterWeb.Models;
 using PageMonitorRepository;
+using PageMonitorRepository.Monitor;
 
 namespace PageHitterWeb.Controllers
 {

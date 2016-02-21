@@ -4,8 +4,10 @@
     ViewBag.Title = "ShowPageTimes";
 }
 
-<h2>Show Page Times</h2>
-
+<h2>Page Response Times</h2>
+<p>
+    Current time:  @Html.Label(DateTime.Now.ToString())
+</p>
 <div>
     <table class="table">
         <tr>
@@ -36,7 +38,7 @@
             </tr>
         }
 </table>
-
+</div>
 
 <p>
     @*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@

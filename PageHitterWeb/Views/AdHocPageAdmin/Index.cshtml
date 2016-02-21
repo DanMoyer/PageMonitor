@@ -4,8 +4,12 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2>AdHoc Test Pages</h2>
+<p>
+    The list of pages tested by AdHoc test.
+    Check / Clear the Monitor checkbox to control the pages hit by the AdHoc test
+</p>
+<hr/>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -15,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Url)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayNameFor(model => model.Test)
         </th>
         <th></th>
     </tr>
@@ -26,7 +30,7 @@
             @Html.DisplayFor(modelItem => item.Url)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.User)
+            @Html.DisplayFor(modelItem => item.Test)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

@@ -1,41 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Security.Principal;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using PageHitter;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
+using PageMonitorRepository.AdHoc;
 
 namespace PageHitterWeb.Controllers
 {
-    public class AdHocPageAdminController : Controller
-    {
+	public class AdHocPageAdminController : Controller
+	{
 		// GET: PageAdmin
 		public ActionResult Index()
 		{
 			var models = new List<AdHocPageModel>();
 
+			var user = User;
+			var userName = user.Identity.GetUserName();
+
 			using (var repo = new AdHocPageRepository())
 			{
-				var shortName = GetShortName();
+				var shortName = UserIdentity.GetShortName(User);
 				var entities = repo.GetAllByUser(shortName);
 
 				models.AddRange(entities.Select(page => new AdHocPageModel
 				{
-					Id = page.Id,
-					Url = page.Url
+					Id   = page.Id,
+					Url  = page.Url,
+					Test = page.Test
 				}));
 			}
 
 			return View(models);
 		}
 
-		//GET: PageAdmin/Details/5
-		//public ActionResult Details(int id)
-		//{
-		//	return View();
-		//}
 
 		// GET: PageAdmin/Create
 		public ActionResult Create()
@@ -55,7 +55,8 @@ namespace PageHitterWeb.Controllers
 				var entity = new AdHocPage
 				{
 					Url    = model.Url,
-					UserId = GetShortName()
+					User   = UserIdentity.GetShortName(User),
+					Test   = true
 				};
 
 				using (var repo = new AdHocPageRepository())
@@ -83,7 +84,7 @@ namespace PageHitterWeb.Controllers
 
 				model.Id   = id;
 				model.Url  = entity.Url;
-				model.User = GetShortName();
+				model.Test = entity.Test;
 			}
 
 			return View(model);
@@ -104,7 +105,8 @@ namespace PageHitterWeb.Controllers
 					var entity = repo.GetById(model.Id);
 
 					entity.Url    = model.Url;
-					entity.UserId = GetShortName();
+					entity.User   = UserIdentity.GetShortName(User);
+					entity.Test   = model.Test;
 
 					repo.SaveChanges();
 				}
@@ -128,7 +130,7 @@ namespace PageHitterWeb.Controllers
 
 				model.Id   = id;
 				model.Url  = entity.Url;
-				model.User = GetShortName();
+				model.Test = entity.Test;
 			}
 
 			return View(model);
@@ -154,14 +156,5 @@ namespace PageHitterWeb.Controllers
 				return View();
 			}
 		}
-
-	    private string GetShortName()
-	    {
-			var userName = User.Identity.GetUserName();
-			var index = userName.IndexOf("@", 1, StringComparison.Ordinal);
-			var shortName = userName.Substring(0, index);
-
-			return shortName;
-	    }
 	}
 }

@@ -57,21 +57,24 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Identity" />
+    <Folder Include="AdHoc" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Pages.sql" />
     <Build Include="PageStatus.sql" />
     <Build Include="Delay.sql" />
-    <Build Include="AspNetRoles.sql" />
-    <Build Include="AspNetUserClaims.sql" />
-    <Build Include="AspNetUserLogins.sql" />
-    <Build Include="AspNetUserRoles.sql" />
-    <Build Include="AspNetUsers.sql" />
-    <Build Include="AdHocPages.sql" />
-    <Build Include="AdHocPageStatus.sql" />
+    <Build Include="Identity\AspNetRoles.sql" />
+    <Build Include="Identity\AspNetUserClaims.sql" />
+    <Build Include="Identity\AspNetUserLogins.sql" />
+    <Build Include="Identity\AspNetUserRoles.sql" />
+    <Build Include="Identity\AspNetUsers.sql" />
+    <Build Include="AdHoc\AdHocPages.sql" />
+    <Build Include="AdHoc\AdHocPageStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InsertPages.sql" />
     <None Include="InsertDelay.sql" />
+    <None Include="AdHoc\InsertAdHocPages.sql" />
   </ItemGroup>
 </Project>

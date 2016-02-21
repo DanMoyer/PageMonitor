@@ -51,29 +51,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdHocPage.cs" />
-    <Compile Include="AdHocPageRepository.cs" />
-    <Compile Include="AdHocPageStatu.cs" />
-    <Compile Include="AdHocPageStatusRepository.cs" />
-    <Compile Include="AspNetRole.cs" />
-    <Compile Include="AspNetUser.cs" />
-    <Compile Include="AspNetUserClaim.cs" />
-    <Compile Include="AspNetUserLogin.cs" />
-    <Compile Include="Delay.cs" />
-    <Compile Include="DelayRepository.cs" />
+    <Compile Include="AdHoc\AdHocPage.cs" />
+    <Compile Include="AdHoc\AdHocPageRepository.cs" />
+    <Compile Include="AdHoc\AdHocPageStatu.cs" />
+    <Compile Include="AdHoc\AdHocPageStatusRepository.cs" />
+    <Compile Include="Delay\Delay.cs" />
+    <Compile Include="Delay\DelayRepository.cs" />
+    <Compile Include="Identity\AspNetRole.cs" />
+    <Compile Include="Identity\AspNetUser.cs" />
+    <Compile Include="Identity\AspNetUserClaim.cs" />
+    <Compile Include="Identity\AspNetUserLogin.cs" />
     <Compile Include="Migrations\201602142108017_InitialBaseline.cs" />
     <Compile Include="Migrations\201602142108017_InitialBaseline.Designer.cs">
       <DependentUpon>201602142108017_InitialBaseline.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Monitor\Page.cs" />
+    <Compile Include="Monitor\PageMonitorRepository.cs" />
+    <Compile Include="Monitor\PagesRepository.cs" />
+    <Compile Include="Monitor\PageStatus.cs" />
+    <Compile Include="Monitor\PageStatusRepository.cs" />
     <Compile Include="PageMonitorDb.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="PageMonitorRepository.cs" />
-    <Compile Include="PagesRepository.cs" />
-    <Compile Include="PageStatus.cs" />
-    <Compile Include="PageStatusRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -84,10 +83,7 @@
       <DependentUpon>201602142108017_InitialBaseline.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AdHoc\" />
-    <Folder Include="Identity Pages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
