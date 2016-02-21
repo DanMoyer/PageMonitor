@@ -5,6 +5,6 @@
 		public short Id { get; set; }
 		public string Url { get; set; }
 
-		public string User { get; set; }
+		public short Test { get; set; }
 	}
 }

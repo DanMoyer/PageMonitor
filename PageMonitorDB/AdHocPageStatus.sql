@@ -7,6 +7,5 @@
 	[Status]			NVARCHAR(200) NOT NULL,
 	[ExceptionMessage]	NVARCHAR(200) NULL,
 	[Created]			DATETIME NOT NULL,
-	[UserId]		    NVARCHAR(128) NOT NULL
-	--CONSTRAINT FK_AdHocPageStatus_AspNetUsers_ID FOREIGN KEY  (UserId) REFERENCES  [dbo].[AspNetUsers](Id)
+	[User]				NVARCHAR(128) NOT NULL
 )
