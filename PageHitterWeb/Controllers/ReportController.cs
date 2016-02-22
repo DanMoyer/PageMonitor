@@ -52,12 +52,13 @@ namespace PageHitterWeb.Controllers
 		public ActionResult Index(ChartViewModel model)
 		{
 			List<ResponseTimes> responseTimes;
-
-
-
+			
 			using (var context = new PageMonitorDb())
 			{
-				var query = GetQuery();
+				var startDate = model.StartDate.ToShortDateString();
+				var endDate = model.EndDate.ToShortDateString();
+
+				var query = GetQuery(startDate, endDate);
 
 				responseTimes = context.Database.SqlQuery<ResponseTimes>(query).ToList();
 			}
@@ -86,15 +87,9 @@ namespace PageHitterWeb.Controllers
 
 		public ActionResult Report()
 		{
-			var dates = new List<SelectListItem>
-			{
-				new SelectListItem {Text = "2016-02-01", Value = "2016-02-01"},
-				new SelectListItem {Text = "2016-02-02", Value = "2016-02-02"}
-			};
-
 			var model = new ChartViewModel
 			{
-				Dates = dates
+				//Dates = dates
 			};
 
 			return View(model);
@@ -134,26 +129,29 @@ namespace PageHitterWeb.Controllers
 			return myChart;
 		}
 
-		private string GetQuery()
+		private string GetQuery(string startDate, string endDate)
 		{
-			const string query =
+
+			var createdClause = $"AND Created > '{startDate}' AND Created < '{endDate}' ";
+
+			string query =
 				"SELECT ResponseTime, Count(*) TotalCount FROM ( " +
-					"SELECT ResponseTime = " +
-					"CASE  " +
-					"WHEN ResponseTime >= 0 and ResponseTime <= 1 THEN '0-1' " +
-					"WHEN ResponseTime >= 1 and ResponseTime <= 5 THEN '1-5' " +
-					"WHEN ResponseTime >= 5 and ResponseTime <= 10 THEN '6-10' " +
-					"WHEN ResponseTime >= 10 and ResponseTime <= 15 THEN '10-15' " +
-					"WHEN ResponseTime >= 15 and ResponseTime <= 20 THEN '15-20' " +
-					"WHEN ResponseTime >= 20 and ResponseTime <= 25 THEN '20-25' " +
-					"ELSE 'over 25' " +
-					"END " +
-					"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
-					"Url = 'https://www.findlay.edu' " +
-					"AND Status = 'OK' " +
-					"AND Created > '2016-02-14' AND Created < '2016-02-15' " +
-					"GROUP BY ResponseTime) AS SourceTabel " +
-					"GROUP BY ResponseTime ";
+				"SELECT ResponseTime = " +
+				"CASE  " +
+				"WHEN ResponseTime >= 0 and ResponseTime <= 1 THEN '0-1' " +
+				"WHEN ResponseTime >= 1 and ResponseTime <= 5 THEN '1-5' " +
+				"WHEN ResponseTime >= 5 and ResponseTime <= 10 THEN '6-10' " +
+				"WHEN ResponseTime >= 10 and ResponseTime <= 15 THEN '10-15' " +
+				"WHEN ResponseTime >= 15 and ResponseTime <= 20 THEN '15-20' " +
+				"WHEN ResponseTime >= 20 and ResponseTime <= 25 THEN '20-25' " +
+				"ELSE 'over 25' " +
+				"END " +
+				"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
+				"Url = 'https://www.findlay.edu' " +
+				"AND Status = 'OK' " +
+				$"AND Created >= '{startDate}' AND Created <= '{endDate}' " +
+				"GROUP BY ResponseTime) AS SourceTabel " +
+				"GROUP BY ResponseTime ";
 
 			return query;
 		}
