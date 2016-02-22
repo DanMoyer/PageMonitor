@@ -10,6 +10,11 @@ using PageMonitorRepository.Monitor;
 
 
 /*
+	http://weblogs.asp.net/jalpeshpvadgama/chart-helpers-in-asp-net-mvc3
+
+	http://www.4guysfromrolla.com/articles/092210-1.aspx
+
+	http://blog.smirne.com/2012/09/creating-interactive-charts-with-aspnet.html
 
 	http://www.asp.net/web-pages/overview/data/7-displaying-data-in-a-chart
 
@@ -23,7 +28,7 @@ using PageMonitorRepository.Monitor;
 
 	http://www.codeproject.com/Articles/125230/ASP-NET-MVC-Chart-Control
 
-	http://www.4guysfromrolla.com/articles/092210-1.aspx
+
 
 	http://www.dotnetcurry.com/aspnet-mvc/822/html5-bar-chart-helper-aspnet-mvc
 
@@ -51,12 +56,29 @@ namespace PageHitterWeb.Controllers
 		// GET: Report
 		public ActionResult Index(ChartViewModel model)
 		{
-			List<ResponseTimes> responseTimes;
+
 			
+
+			//model.Chart = chart;
+
+			//var stream = chart.Write(format: "png");
+			//var bytes = chart.GetBytes();
+			//var webImage = chart.ToWebImage();
+
+			return View(model);
+		}
+
+		public ActionResult DrawChart()
+		{
+			List<ResponseTimes> responseTimes;
+
 			using (var context = new PageMonitorDb())
 			{
-				var startDate = model.StartDate.ToShortDateString();
-				var endDate = model.EndDate.ToShortDateString();
+				//var startDate = model.StartDate.ToShortDateString();
+				//var endDate = model.EndDate.ToShortDateString();
+
+				var startDate = "02/15/2016";
+				var endDate = "02/17/2016";
 
 				var query = GetQuery(startDate, endDate);
 
@@ -74,16 +96,9 @@ namespace PageHitterWeb.Controllers
 
 			var chart = GetChart(xValue, yValue);
 
-			//var model = new ChartViewModel
-			//{
-			//	Chart = chart,
-			//};
-
-			model.Chart = chart;
-
-
-			return View(model);
+			return File(chart.GetBytes(), "image/bytes");
 		}
+
 
 		public ActionResult Report()
 		{
