@@ -1,6 +1,6 @@
 ﻿@model PageHitterWeb.Models.ChartViewModel
 @{
-    Layout = null;
+  
 }
 
 
@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 </head>
-<body>
+<body >
 
     <br/>
     <h2>Page Response</h2>
@@ -21,15 +21,42 @@
                  new
                  {
                      startDate = Model.StartDate.ToShortDateString(),
-                     endDate = Model.EndDate.ToShortDateString(),
-                     url = Model.Url
+                     endDate   = Model.EndDate.ToShortDateString(),
+                     url       = "https://www.findlay.edu"
+                 })
+         alt="Smiley face" height="400" width="600">
+
+    <img src=@Url.Action("DrawChart", "Report",
+                 new
+                 {
+                     startDate = Model.StartDate.ToShortDateString(),
+                     endDate   = Model.EndDate.ToShortDateString(),
+                     url       = "https://oilernation.findlay.edu/Pages/default.aspx"
+                 })
+         alt="Smiley face" height="400" width="600">
+
+    <img src=@Url.Action("DrawChart", "Report",
+                 new
+                 {
+                     startDate = Model.StartDate.ToShortDateString(),
+                     endDate   = Model.EndDate.ToShortDateString(),
+                     url       = "https://collaborate.findlay.edu" 
+                 })
+         alt="Smiley face" height="400" width="600">
+
+    <img src=@Url.Action("DrawChart", "Report",
+                 new
+                 {
+                     startDate = Model.StartDate.ToShortDateString(),
+                     endDate   = Model.EndDate.ToShortDateString(),
+                     url       = "https://stg.findlay.edu"
                  })
          alt="Smiley face" height="400" width="600">
 
 
-    <br/>
+<br/><br /><br />
     <div>
-        @Html.ActionLink("Home", "Index", "Home")
+        @Html.ActionLink("Home", "Index", "Home", null,  new { @class = "btn btn-primary" })
     </div>
 
 </body>

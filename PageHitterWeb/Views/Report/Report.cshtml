@@ -10,21 +10,22 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
+    <div class="form-inline">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "control-label col-md-4"})
             <div class="col-md-10">
-                @Html.TextBox("StartDate", "", new { style = "width:150px", @class = "form-control datepicker" })
+                @Html.TextBox("StartDate", Model.StartDate.ToShortDateString(), new { style = "width:150px", @class = "form-control datepicker" })
 
                 @Html.ValidationMessageFor(model => model.StartDate, "", new {@class = "text-danger"})
             </div>
          </div>
 
+        @* Uncomment to see the MVC datepicker *@
         @*<div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "control-label col-md-4"})
             <div class="col-md-10">
                 @Html.Editor("EndDate", new {@class = "form-control "})
 
@@ -34,23 +35,23 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-4" })
             <div class="col-md-10">
-                @Html.TextBox("EndDate", "", new { style = "width:150px", @class = "form-control datepicker" })
+                @Html.TextBox("EndDate", Model.EndDate.ToShortDateString(), new { style = "width:150px", @class = "form-control datepicker" })
 
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
-
+    <br/><br/><br /><br /><br /><br />
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-0 col-md-2">
                 <input type="submit" value="Show Chart" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-
-<div>
+<br /><br />
+<div class="col-md-offset-0 col-md-2">
     @Html.ActionLink("Back to List", "Index")
 </div>
 

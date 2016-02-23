@@ -1,49 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using PageHitterWeb.Models;
 using PageMonitorRepository;
-using PageMonitorRepository.Monitor;
 
 
 /*
 	http://weblogs.asp.net/jalpeshpvadgama/chart-helpers-in-asp-net-mvc3
-
 	http://www.4guysfromrolla.com/articles/092210-1.aspx
-
 	http://blog.smirne.com/2012/09/creating-interactive-charts-with-aspnet.html
-
 	http://www.asp.net/web-pages/overview/data/7-displaying-data-in-a-chart
-
 	https://msdn.microsoft.com/en-us/library/dd489233.aspx
-
 	https://msdn.microsoft.com/en-us/library/system.web.helpers.chart(v=vs.99)
-
 	http://www.danylkoweb.com/Blog/simplified-aspnet-mvc-charts-A5
-
 	http://stackoverflow.com/questions/21430701/drawing-charts-into-asp-net-mvc-4-razor-c-web-sites
-
 	http://www.codeproject.com/Articles/125230/ASP-NET-MVC-Chart-Control
 
-
-
 	http://www.dotnetcurry.com/aspnet-mvc/822/html5-bar-chart-helper-aspnet-mvc
-
 	http://blog.smirne.com/2012/09/creating-interactive-charts-with-aspnet.html
-
 	http://www.jqplot.com/index.php
-
 	http://www.highcharts.com/
-
 	https://www.shieldui.com/purchase
-
 	https://www.nuget.org/packages/Chart.Mvc/
-
 	http://www.chartjs.org/docs/
-
 	http://www.asp.net/mvc/overview/older-versions/using-the-html5-and-jquery-ui-datepicker-popup-calendar-with-aspnet-mvc/using-the-html5-and-jquery-ui-datepicker-popup-calendar-with-aspnet-mvc-part-4
 
 */
@@ -61,33 +42,55 @@ namespace PageHitterWeb.Controllers
 
 		public ActionResult DrawChart(string startDate, string endDate, string url)
 		{
-			List<ResponseTimes> responseTimes;
-
-			using (var context = new PageMonitorDb())
+			try
 			{
-				var query = GetQuery(startDate, endDate, url);
+				var totalPages = 0;
+				List<ResponseTimes> responseTimes;
 
-				responseTimes = context.Database.SqlQuery<ResponseTimes>(query).ToList();
+				using (var context = new PageMonitorDb())
+				{
+					var query = GetQueryPageTimes(startDate, endDate, url);
+
+					responseTimes = context.Database.SqlQuery<ResponseTimes>(query).ToList();
+
+					query = GetQueryTotalPages(startDate, endDate, url);
+
+					totalPages = context.Database.SqlQuery<int>(query).First();
+
+				}
+
+				var urlAndPages = url + $"     Total Pages: {totalPages}";
+
+				var xValue = new string[responseTimes.Count];
+				var yValue = new string[responseTimes.Count];
+
+				for (var idx = 0; idx < responseTimes.Count; idx++)
+				{
+					xValue[idx] = responseTimes[idx].ResponseTime;
+					yValue[idx] = responseTimes[idx].TotalCount.ToString();
+				}
+
+				var chart = GetChart(xValue, yValue, urlAndPages);
+
+				return File(chart.GetBytes(), "image/bytes");
 			}
-
-			var xValue = new string[responseTimes.Count];
-			var yValue = new string[responseTimes.Count];
-
-			for (var idx = 0; idx < responseTimes.Count; idx++)
+			catch (Exception ex)
 			{
-				xValue[idx] = responseTimes[idx].ResponseTime;
-				yValue[idx] = responseTimes[idx].TotalCount.ToString();
+				// ReSharper disable once UnusedVariable
+				var msg = ex.Message;
+				return RedirectToAction("Index", "Home");
 			}
-
-			var chart = GetChart(xValue, yValue);
-
-			return File(chart.GetBytes(), "image/bytes");
 		}
 
 
 		public ActionResult Report()
 		{
-			var model = new ChartViewModel();
+			var model = new ChartViewModel
+			{
+				StartDate = DateTime.Now.AddDays(-1),
+				EndDate   = DateTime.Now
+			};
+
 
 			return View(model);
 		}
@@ -107,7 +110,7 @@ namespace PageHitterWeb.Controllers
 		}
 
 
-		private Chart GetChart(string[] xValues, string[] yValues)
+		private Chart GetChart(string[] xValues, string[] yValues, string url)
 		{
 			//return new Chart(600, 400, ChartTheme.Blue)
 			//	.AddTitle("Page Response Times")
@@ -120,16 +123,19 @@ namespace PageHitterWeb.Controllers
 
 
 			var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
-				.AddTitle("Page Response Times")
+				.AddTitle(url)
 				.AddSeries(
 					name: "ChartTitle",
 					xValue: xValues,
-					yValues: yValues);
+					yValues: yValues)
+				.SetXAxis("Seconds")
+				.SetYAxis("Page Hits");
+				
 
 			return myChart;
 		}
 
-		private string GetQuery(string startDate, string endDate, string url)
+		private string GetQueryPageTimes(string startDate, string endDate, string url)
 		{
 			string query =
 				"SELECT ResponseTime, Count(*) TotalCount FROM ( " +
@@ -152,5 +158,20 @@ namespace PageHitterWeb.Controllers
 
 			return query;
 		}
+
+		private string GetQueryTotalPages(string startDate, string endDate, string url)
+		{
+			string query =
+				"SELECT  Count(*) TotalCount " +
+				"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
+				$"Url = '{url}' " +
+				"AND Status = 'OK' " +
+				$"AND Created >= '{startDate}' AND Created <= '{endDate}' ";
+
+			return query;
+
+		}
 	}
 }
+
+
