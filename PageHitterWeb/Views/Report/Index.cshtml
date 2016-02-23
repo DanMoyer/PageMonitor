@@ -1,0 +1,31 @@
+﻿@model PageHitterWeb.Models.ChartViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+<div class="container body-content">
+    <h2>Page Response Times</h2>
+
+
+    <div>
+        @Model.Chart.Write(format: "png")
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
+
+
