@@ -76,5 +76,6 @@
     <None Include="InsertPages.sql" />
     <None Include="InsertDelay.sql" />
     <None Include="AdHoc\InsertAdHocPages.sql" />
+    <None Include="ExampleScriptToCalcResponseTimeBuckets.sql" />
   </ItemGroup>
 </Project>

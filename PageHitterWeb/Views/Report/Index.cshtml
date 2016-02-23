@@ -1,4 +1,4 @@
-﻿@*@model PageHitterWeb.Models.ChartViewModel*@
+﻿@model PageHitterWeb.Models.ChartViewModel
 @{
     Layout = null;
 }
@@ -12,13 +12,27 @@
     <title>Index</title>
 </head>
 <body>
-<br/>
-<p>TEST TEST </p>
-<h2>Our Awesome Chart!</h2>
 
-<img src=@Url.Action("DrawChart") alt="Smiley face" height="400" width="600">
+    <br/>
+    <h2>Page Response</h2>
+    <p>Page reponse times from @Model.StartDate.ToShortDateString() to @Model.EndDate.ToShortDateString() </p>
 
-@*@Model.Chart.Write(format: "png")*@
+    <img src=@Url.Action("DrawChart", "Report",
+                 new
+                 {
+                     startDate = Model.StartDate.ToShortDateString(),
+                     endDate = Model.EndDate.ToShortDateString(),
+                     url = Model.Url
+                 })
+         alt="Smiley face" height="400" width="600">
+
+
+    <br/>
+    <div>
+        @Html.ActionLink("Home", "Index", "Home")
+    </div>
+
 </body>
+
 </html>
 

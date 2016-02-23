@@ -56,31 +56,16 @@ namespace PageHitterWeb.Controllers
 		// GET: Report
 		public ActionResult Index(ChartViewModel model)
 		{
-
-			
-
-			//model.Chart = chart;
-
-			//var stream = chart.Write(format: "png");
-			//var bytes = chart.GetBytes();
-			//var webImage = chart.ToWebImage();
-
 			return View(model);
 		}
 
-		public ActionResult DrawChart()
+		public ActionResult DrawChart(string startDate, string endDate, string url)
 		{
 			List<ResponseTimes> responseTimes;
 
 			using (var context = new PageMonitorDb())
 			{
-				//var startDate = model.StartDate.ToShortDateString();
-				//var endDate = model.EndDate.ToShortDateString();
-
-				var startDate = "02/15/2016";
-				var endDate = "02/17/2016";
-
-				var query = GetQuery(startDate, endDate);
+				var query = GetQuery(startDate, endDate, url);
 
 				responseTimes = context.Database.SqlQuery<ResponseTimes>(query).ToList();
 			}
@@ -102,10 +87,7 @@ namespace PageHitterWeb.Controllers
 
 		public ActionResult Report()
 		{
-			var model = new ChartViewModel
-			{
-				//Dates = dates
-			};
+			var model = new ChartViewModel();
 
 			return View(model);
 		}
@@ -117,6 +99,9 @@ namespace PageHitterWeb.Controllers
 
 			UpdateModel(model);
 
+			//The URL should come from a selection in the UI.
+			//hardcode here for debugging
+			model.Url = "https://www.findlay.edu";
 			
 			return RedirectToAction("Index", model);
 		}
@@ -144,11 +129,8 @@ namespace PageHitterWeb.Controllers
 			return myChart;
 		}
 
-		private string GetQuery(string startDate, string endDate)
+		private string GetQuery(string startDate, string endDate, string url)
 		{
-
-			var createdClause = $"AND Created > '{startDate}' AND Created < '{endDate}' ";
-
 			string query =
 				"SELECT ResponseTime, Count(*) TotalCount FROM ( " +
 				"SELECT ResponseTime = " +
@@ -162,7 +144,7 @@ namespace PageHitterWeb.Controllers
 				"ELSE 'over 25' " +
 				"END " +
 				"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
-				"Url = 'https://www.findlay.edu' " +
+				$"Url = '{url}' " +
 				"AND Status = 'OK' " +
 				$"AND Created >= '{startDate}' AND Created <= '{endDate}' " +
 				"GROUP BY ResponseTime) AS SourceTabel " +
