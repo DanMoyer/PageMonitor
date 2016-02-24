@@ -522,7 +522,6 @@
     <Content Include="Views\AdHocPageAdmin\Edit.cshtml" />
     <Content Include="Views\AdHocPageAdmin\Delete.cshtml" />
     <Content Include="Views\Report\Report.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Report\DisplayTemplates\LoudDateTime.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />

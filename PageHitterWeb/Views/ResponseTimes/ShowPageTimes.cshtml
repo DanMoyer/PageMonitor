@@ -1,4 +1,5 @@
-﻿@model  IEnumerable<PageHitterWeb.Models.PageResponseModel>   
+﻿@using System.Globalization
+@model  IEnumerable<PageHitterWeb.Models.PageResponseModel>   
 
 @{
     ViewBag.Title = "ShowPageTimes";
@@ -6,7 +7,13 @@
 
 <h2>Page Response Times</h2>
 <p>
-    Current time:  @Html.Label(DateTime.Now.ToString())
+    @{
+        var timeZoneId = "Eastern Standard Time";
+        var easternZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+        var easternTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), easternZone);
+    }
+
+    Current time: @Html.Label(easternTime.ToString("yyyy-MM-dd HH:mm:ss tt", CultureInfo.InvariantCulture))
 </p>
 <div>
     <table class="table">
@@ -33,7 +40,10 @@
                     @Html.DisplayFor(modelItem => item.ResponseTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Created)
+                    @{
+                        var timeCreated = item.Created.ToString("yyyy-MM-dd HH:mm:ss tt", CultureInfo.InvariantCulture);
+                    }
+                    @Html.Label(timeCreated)
                 </td>
             </tr>
         }
