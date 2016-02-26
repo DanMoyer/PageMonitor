@@ -10,6 +10,7 @@ using PageMonitorRepository.AdHoc;
 
 namespace PageHitterWeb.Controllers
 {
+	[Authorize]
 	public class AdHocPageAdminController : Controller
 	{
 		// GET: PageAdmin

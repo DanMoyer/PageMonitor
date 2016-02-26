@@ -38,7 +38,7 @@ namespace PageMonitorConsole
 					using (var delayRepository = new DelayRepository())
 					{
 						var delay = delayRepository.GetDelay();
-						var pages = pagesRepository.GetAllProdMonitor();
+						var pages = pagesRepository.GetAllMonitor();
 
 						var interPageSleepTime = new TimeSpan(0, delay.PageHour, delay.PageMinute, delay.PageSecond);
 

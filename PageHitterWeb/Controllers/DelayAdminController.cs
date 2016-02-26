@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
 using PageMonitorRepository.Delay;
 
 namespace PageHitterWeb.Controllers
 {
+	[Authorize]
     public class DelayAdminController : Controller
     {
         //// GET: DelayAdmin

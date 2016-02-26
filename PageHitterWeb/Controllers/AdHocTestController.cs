@@ -8,6 +8,7 @@ using PageMonitorRepository.AdHoc;
 
 namespace PageHitterWeb.Controllers
 {
+	[Authorize]
 	public class AdHocTestController : Controller
 	{
 		// GET: AdHocTest

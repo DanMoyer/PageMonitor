@@ -94,7 +94,9 @@ namespace PageHitterWeb.Controllers
 					using (var repoPageStatus = new PageStatusRepository())
 					{
 
-						var pages = repoPages.GetAllProdMonitor();
+						//Get page with Monitor bit on.
+						var pages = repoPages.GetAllMonitor();
+						//var pages = repoPages.GetAllProdMonitor();
 						//var pages = repoPages.GetAllStgMonitor();
 
 						var pageGetter = new PageGetter();

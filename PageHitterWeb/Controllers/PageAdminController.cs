@@ -6,6 +6,7 @@ using PageMonitorRepository.Monitor;
 
 namespace PageHitterWeb.Controllers
 {
+	[Authorize]
 	public class PageAdminController : Controller
 	{
 		// GET: PageAdmin
