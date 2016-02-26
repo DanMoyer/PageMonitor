@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.UI.DataVisualization.Charting;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
+using PageMonitorRepository.Monitor;
+using Chart = System.Web.Helpers.Chart;
 
 
 /*
@@ -42,46 +46,111 @@ namespace PageHitterWeb.Controllers
 
 		public ActionResult DrawChart(string startDate, string endDate, string url)
 		{
-			try
-			{
-				var totalPages = 0;
-				List<ResponseTimes> responseTimes;
-
-				using (var context = new PageMonitorDb())
+				try
 				{
-					var query = GetQueryPageTimes(startDate, endDate, url);
+					//var totalPages = 0;
+					ResponseTimes responseTimes;
+					using (var context = new PageStatusRepository())
+					{
+						var responseTimesList = context.GetPageStatusByDate(startDate, endDate, url);
 
-					responseTimes = context.Database.SqlQuery<ResponseTimes>(query).ToList();
+						responseTimes = GetTimeBuckets(responseTimesList);
+					}
 
-					query = GetQueryTotalPages(startDate, endDate, url);
+					var urlAndPages = url + $"     Total Pages: {responseTimes.TotalCount}";
 
-					totalPages = context.Database.SqlQuery<int>(query).First();
+					var xValue = new string[responseTimes.ResponseTimeBuckets.Count];
+					var yValue = new string[responseTimes.ResponseTimeBuckets.Count];
 
+					for (var idx = 0; idx < responseTimes.ResponseTimeBuckets.Count; idx++)
+					{
+						xValue[idx] = responseTimes.ResponseTimeBuckets[idx].BucketLabel;
+						yValue[idx] = responseTimes.ResponseTimeBuckets[idx].Count.ToString();
+					}
+
+					var chart = GetChart2(xValue, yValue, urlAndPages);
+
+					var memStream = new MemoryStream();
+					chart.SaveImage(memStream);
+					return File(memStream.GetBuffer(), "image/bytes");
+
+					//return File(chart.GetBytes(), "image/bytes");
 				}
 
-				var urlAndPages = url + $"     Total Pages: {totalPages}";
-
-				var xValue = new string[responseTimes.Count];
-				var yValue = new string[responseTimes.Count];
-
-				for (var idx = 0; idx < responseTimes.Count; idx++)
+				catch (Exception ex)
 				{
-					xValue[idx] = responseTimes[idx].ResponseTime;
-					yValue[idx] = responseTimes[idx].TotalCount.ToString();
+					// ReSharper disable once UnusedVariable
+					var msg = ex.Message;
+					return RedirectToAction("Index", "Home");
 				}
-
-				var chart = GetChart(xValue, yValue, urlAndPages);
-
-				return File(chart.GetBytes(), "image/bytes");
-			}
-			catch (Exception ex)
-			{
-				// ReSharper disable once UnusedVariable
-				var msg = ex.Message;
-				return RedirectToAction("Index", "Home");
-			}
 		}
 
+
+		private static ResponseTimes GetTimeBuckets(IEnumerable<double> responseTimes)
+		{
+			var times = new ResponseTimes();
+
+			//this is the total buckets used in the graph.
+			var allTimeBuckets = new List<string> { "0-1", "1-2", "2-3", "3-4", "4-5", "5-10", "10-15", "15-20", "Unknown" };
+
+			var responseTimeBuckets = new List<ResponseTimesBuckets>();
+
+			//Find what 'bucket' each response time belongs in
+			var query =
+			(from n in responseTimes
+				 where n > 0
+				 select new ResponseTimesBuckets
+				 {
+					 BucketLabel =
+						(
+							 n >= 0 && n <= 0.999 ? "0-1" :
+							 n >= 1 && n <= 1.999 ? "1-2" :
+							 n >= 2 && n <= 2.999 ? "2-3" :
+							 n >= 3 && n <= 3.999 ? "3-4" :
+							 n >= 4 && n <= 4.999 ? "4-5" :
+							 n >= 5 && n <= 9.999 ? "5-10" :
+							 n >= 10 && n <= 14.999 ? "10-15" :
+							 n >= 15 && n <= 19.999 ? "15-20" :
+							 n >= 20 ? ">20" : "Unknown"
+						)
+				 }
+			 );
+
+			var responseTimeses = query as ResponseTimesBuckets[] ?? query.ToArray();
+			var bucketList      = responseTimeses.Select(x => x.BucketLabel);
+			var buckets         = responseTimeses.GroupBy(x => x.BucketLabel);
+			
+			//Group the buckets into a collection. Calculate number of page hits for each bucket
+			responseTimeBuckets.AddRange(
+					responseTimeses
+					.GroupBy(x => x.BucketLabel)
+					.Select(bucket => new { bucket, count = bucketList.Count(x => x == bucket.Key) })
+					.Select(@t => new ResponseTimesBuckets { BucketLabel = @t.bucket.Key, Count = @t.count }));
+			
+			//Of the all the available buckets, find the buckets with no page hits.
+			responseTimeBuckets.AddRange(
+				allTimeBuckets.Except(buckets.Select(x => x.Key))
+				.Select(item => new ResponseTimesBuckets { BucketLabel = item, Count = 0 }));
+
+
+			//Calculate the total number of pages hit
+			var allpageCounts = responseTimeBuckets.Select(x => x.Count).ToList();
+			var totalCount    = allpageCounts.Sum();
+
+			//Using the numeric value of the bucket label, set a order value
+			// so the buckets display in correct order on the graph
+			foreach (var item in responseTimeBuckets)
+			{
+				var index = item.BucketLabel.IndexOf("-", StringComparison.Ordinal);
+
+				item.Order = index > 0 ? Convert.ToInt32(item.BucketLabel.Substring(0, index)) : 100;
+			}
+
+			times.ResponseTimeBuckets = responseTimeBuckets.OrderBy(x => x.Order).ToList();
+			times.TotalCount = totalCount;
+
+			return times;
+		}
 
 		public ActionResult Report()
 		{
@@ -110,68 +179,124 @@ namespace PageHitterWeb.Controllers
 		}
 
 
+		private System.Web.UI.DataVisualization.Charting.Chart GetChart2(string[] xValues, string[] yValues, string url)
+		{
+			var chart = new System.Web.UI.DataVisualization.Charting.Chart
+			{
+				Width                   = 600,
+				Height                  = 300,
+				BackColor               = Color.FromArgb(255, 140, 0),
+				BorderlineDashStyle     = ChartDashStyle.Solid,
+				BackSecondaryColor      = Color.White,
+				BackGradientStyle       = GradientStyle.TopBottom,
+				BorderlineWidth         = 1,
+				Palette                 = ChartColorPalette.BrightPastel,
+				BorderlineColor         = Color.FromArgb(0, 0, 0),
+				RenderType              = RenderType.BinaryStreaming,
+				BorderSkin              = {SkinStyle = BorderSkinStyle.Emboss},
+				AntiAliasing            = AntiAliasingStyles.All,
+				TextAntiAliasingQuality = TextAntiAliasingQuality.Normal
+			};
+
+			chart.Titles.Add(CreateTitle(url));
+			//chart.Legends.Add(CreateLegend());
+			chart.Series.Add(CreateSeries(xValues, yValues, url));
+			chart.ChartAreas.Add(CreateChartArea(url));
+
+
+			return chart;
+		}
+
+
 		private Chart GetChart(string[] xValues, string[] yValues, string url)
 		{
-			//return new Chart(600, 400, ChartTheme.Blue)
-			//	.AddTitle("Page Response Times")
-			//	.AddLegend()
-			//	.AddSeries(
-			//		name: "WebSite",
-			//		chartType: "Pie",
-			//		xValue: new[] { "Digg", "DZone", "DotNetKicks", "StumbleUpon" },
-			//		yValues: new[] { "150000", "180000", "120000", "250000" });
-
-
 			var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
 				.AddTitle(url)
 				.AddSeries(
 					name: "ChartTitle",
 					xValue: xValues,
-					yValues: yValues)
+					yValues: yValues
+					)
 				.SetXAxis("Seconds")
 				.SetYAxis("Page Hits");
-				
-
+			
 			return myChart;
 		}
 
-		private string GetQueryPageTimes(string startDate, string endDate, string url)
+		private Series CreateSeries(string[] xValues, string[] yValues, string url)
 		{
-			string query =
-				"SELECT ResponseTime, Count(*) TotalCount FROM ( " +
-				"SELECT ResponseTime = " +
-				"CASE  " +
-				"WHEN ResponseTime >= 0 and ResponseTime <= 1 THEN '0-1' " +
-				"WHEN ResponseTime >= 1 and ResponseTime <= 5 THEN '1-5' " +
-				"WHEN ResponseTime >= 5 and ResponseTime <= 10 THEN '6-10' " +
-				"WHEN ResponseTime >= 10 and ResponseTime <= 15 THEN '10-15' " +
-				"WHEN ResponseTime >= 15 and ResponseTime <= 20 THEN '15-20' " +
-				"WHEN ResponseTime >= 20 and ResponseTime <= 25 THEN '20-25' " +
-				"ELSE 'over 25' " +
-				"END " +
-				"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
-				$"Url = '{url}' " +
-				"AND Status = 'OK' " +
-				$"AND Created >= '{startDate}' AND Created <= '{endDate}' " +
-				"GROUP BY ResponseTime) AS SourceTabel " +
-				"GROUP BY ResponseTime ";
+			var seriesDetail = new Series
+			{
+				Name                = "A", //$"{url}",
+				IsValueShownAsLabel = true,
+				ChartType           = SeriesChartType.Bar,
+				Color               = Color.Black,
+				BorderWidth         = 2,
+			};
 
-			return query;
+			for (var idx = 0; idx < xValues.Length; idx++)
+			{
+				var point = new DataPoint
+				{
+					AxisLabel = xValues[idx],
+					YValues = new double[] {double.Parse(yValues[idx])}
+				};
+
+				seriesDetail.Points.Add(point);
+			}
+			
+			seriesDetail.ChartArea = $"{url}";
+
+			return seriesDetail;
 		}
 
-		private string GetQueryTotalPages(string startDate, string endDate, string url)
+		private Legend CreateLegend()
 		{
-			string query =
-				"SELECT  Count(*) TotalCount " +
-				"FROM[PageMonitor].[dbo].[PageStatus] WHERE " +
-				$"Url = '{url}' " +
-				"AND Status = 'OK' " +
-				$"AND Created >= '{startDate}' AND Created <= '{endDate}' ";
+			var legend = new Legend
+			{
+				ShadowColor  = Color.FromArgb(32, 0, 0),
+				Font         = new Font("Trebuchet MS", 14F, FontStyle.Bold),
+				ShadowOffset = 3,
+				ForeColor    = Color.FromArgb(26, 59, 105)
+			};
 
-			return query;
+			return legend;
+		}
 
+		private Title CreateTitle(string url)
+		{
+			var title = new Title
+			{
+				Text         = $"{url}",
+				ShadowColor  = Color.FromArgb(32, 0, 0, 0),
+				Font         = new Font("Trebuchet MS", 10F, FontStyle.Bold),
+				ShadowOffset = 0,
+				ForeColor    = Color.FromArgb(0, 0, 0)
+			};
+			return title;
+
+		}
+
+		private ChartArea CreateChartArea(string url)
+		{
+			ChartArea chartArea = new ChartArea
+			{
+				Name          = $"{url}",
+				//Name        = "",
+				BackColor     = Color.Transparent,
+				AxisX         = {IsLabelAutoFit = false},
+				AxisY         = {IsLabelAutoFit = false}
+			};
+
+			chartArea.AxisX.LabelStyle.Font     = new Font("Verdana,Arial,Helvetica,sans-serif", 8F, FontStyle.Regular);
+			chartArea.AxisY.LabelStyle.Font     = new Font("Verdana,Arial,Helvetica,sans-serif", 8F, FontStyle.Regular);
+			chartArea.AxisY.LineColor           = Color.FromArgb(0, 0, 0);
+			chartArea.AxisX.LineColor           = Color.FromArgb(0, 0, 0);
+			chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(0, 0, 0, 0);
+			chartArea.AxisX.MajorGrid.LineColor = Color.FromArgb(0, 0, 0, 0);
+			chartArea.AxisX.Interval            = 1;
+
+			return chartArea;
 		}
 	}
 }
-
-

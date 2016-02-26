@@ -8,12 +8,15 @@ namespace PageMonitorRepository.Monitor
 {
 	public class PageMonitorRepository<T> where T : class
 	{
-		private readonly PageMonitorDb _context = new PageMonitorDb();
+		//private readonly PageMonitorDb _context = new PageMonitorDb();
+
+		protected PageMonitorDb Context { get; set; } = new PageMonitorDb();
+
 		public DbSet<T> DbSet { get; set; }
 
 		public PageMonitorRepository()
 		{
-			DbSet = _context.Set<T>();
+			DbSet = Context.Set<T>();
 		}
 
 		public List<T> GetAll()
@@ -35,7 +38,7 @@ namespace PageMonitorRepository.Monitor
 		{
 			try
 			{
-				_context.SaveChanges();
+				Context.SaveChanges();
 			}
 			catch (DbEntityValidationException dbEx)
 			{
@@ -55,7 +58,7 @@ namespace PageMonitorRepository.Monitor
 
 		public void Dispose()
 		{
-			_context.Dispose();
+			Context.Dispose();
 		}
 	}
 }

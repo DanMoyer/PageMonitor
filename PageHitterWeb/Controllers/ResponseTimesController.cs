@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using PageHitterWeb.Models;
-using PageMonitorRepository;
 using PageMonitorRepository.Monitor;
 
 namespace PageHitterWeb.Controllers
@@ -11,7 +10,7 @@ namespace PageHitterWeb.Controllers
 	{
 
 
-		// GET: ResponseTimes/Create
+		// GET: ResponseTimesBuckets/Create
 		public ActionResult ShowPageTimes()
 		{
 			var listPageResponseModel = new List<PageResponseModel>();
@@ -49,7 +48,7 @@ namespace PageHitterWeb.Controllers
 			return View(listPageResponseModel);
 		}
 
-		// POST: ResponseTimes/Create
+		// POST: ResponseTimesBuckets/Create
 		//[HttpPost]
 		//public ActionResult ShowPageTimes(FormCollection collection)
 		//{
