@@ -1,0 +1,107 @@
+﻿@using PageHitterWeb.Models
+@using PageMonitorRepository.Monitor
+
+@section StyleSection{
+    <style type="text/css">
+        .e-grid .e-excelfilter .e-btncontainer input {
+            padding: .2em .4em .3em;
+        }
+
+        ::-ms-clear {
+            display: none;
+        }
+    </style>
+}
+
+
+<div>
+    <b>Total pages:</b> @ViewBag.datasource.Count
+    <br/><br/><br/>
+</div>
+<div>
+
+</div>
+
+
+@section ControlsSection{
+    <div id="controlarea" class="control-panel scrollit" style="visibility: visible;">
+            
+            @(Html.EJ().Grid<PageResponseModel>("Paging")
+                  .Datasource((IEnumerable<object>) ViewBag.datasource)
+                  .AllowScrolling()
+                  .AllowTextWrap()
+                  .AllowFiltering()
+                  .AllowPaging()
+                  .EnableHeaderHover()
+                  .ScrollSettings(scroll => { scroll.Height(400).Width(870); })
+                  //.FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
+                  .AllowSorting()
+                  .Columns(col =>
+                  {
+                      col.Field("Url").HeaderText("Url").IsPrimaryKey(true).TextAlign(TextAlign.Left).Width(70).Add();
+                      col.Field("ResponseTime").HeaderText("Response Time").TextAlign(TextAlign.Left).Width(10).Add();
+                      col.Field("Created").HeaderText("Created").TextAlign(TextAlign.Left).Width(30).Format("{0:MM/dd/yyyy HH:mm:ss tt}").Add();
+                  }))
+        </div>
+} 
+
+
+@*@section PropertiesSection{
+    <div id="ddl1">
+        <ul>
+            <li>Excel</li>
+            <li>Menu</li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Filter Menu Type
+        </div>
+        <div class="col-md-3">
+            @(Html.EJ().DropDownList("filterType")
+                .TargetID("ddl1")
+                .Width("120px")
+                .SelectedItemIndex(0)
+                .ClientSideEvents(eve => { eve.Change("selectChange"); })
+            )
+        </div>
+    </div>
+}*@
+
+
+
+
+
+
+@section ScriptSection{
+    <script type="text/javascript">
+        $(function () {
+            var gridObj = $("#TextWrap").ejGrid("instance");
+            scrolWidth = gridObj.model.scrollSettings.width / $(".cols-sample-area").width();
+            if (gridObj.element.width() > $(".cols-sample-area").width()) {
+                var scrollerwidth = Math.floor($(".cols-sample-area").width())
+                gridObj.option("model.scrollSettings", { width: scrollerwidth })
+                scrolWidth = 1;
+            }
+        });
+        $(window).resize(function () {
+            var gridObj = $("#TextWrap").ejGrid("instance")
+            var scrollerwidth = Math.floor($(".cols-sample-area").width() * scrolWidth)
+            gridObj.option("model.scrollSettings", { width: scrollerwidth })
+        });
+
+
+        $(function () {
+            $("#sampleProperties").ejPropertiesPanel();
+        });
+
+
+        function selectChange(args) {
+            var gridObj = $("#Filtering").data("ejGrid");
+            if (args.itemId == 0)
+                $("#Filtering").ejGrid("option", { filterSettings: { filterType: "excel" } });
+            else
+                $("#Filtering").ejGrid("option", { filterSettings: { filterType: "menu" } });
+        }
+    </script>
+}

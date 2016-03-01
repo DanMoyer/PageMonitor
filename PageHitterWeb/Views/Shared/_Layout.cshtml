@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+    @RenderSection("StyleSection", required: false)    
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/ej/web/Bootstrap-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery-2.2.0.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jsrender.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.easing.1.3.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/web/ej.web.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/ej/common/ej.unobtrusive.min.js")"></script>
+    @RenderSection("ScriptReferenceSection", required: false) 
 </head>
-<body>
+<body onload="samplepageload()">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -30,15 +39,69 @@
         </div>
     </div>
     <div class="container body-content">
+
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Page Monitor Application</p>
-        </footer>
+
+        @if (IsSectionDefined("ControlsSection"))
+        {
+            <div class="cols-iframe">
+                @Html.EJ().Button("slidepanel").Type(ButtonType.Button).ContentType(ContentType.ImageOnly).PrefixIcon("slidepanel-nav").ClientSideEvents(ce => ce.Click("ShowPanelClick")).ShowRoundedCorner(true).Width("45px").Height("45px").CssClass("slidemenuicon")
+               <br/>&nbsp
+                @if (IsSectionDefined("SampleHeading"))
+                {
+                    <div>
+                        <div class="sampleheadingtext">
+                            @RenderSection("SampleHeading", required: false)
+                        </div>
+                    </div>
+                }
+                <div>
+                    <div id="samplefile" class="sample-container">
+                        <div>
+                            <div class="content-container-fluid">
+                                <div class="row">
+                                    <div class="cols-sample-area">
+                                        @RenderSection("ControlsSection", required: false)
+                                    </div>
+                                    @if (IsSectionDefined("PropertiesSection"))
+                                    {
+                                        <div id="sampleProperties">
+                                            <div class="prop-grid keyboard">
+                                                @RenderSection("PropertiesSection", required: false)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+       <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Page Monitor Application</p>
+            </footer>
     </div>
+
+    @Html.EJ().ScriptManager()
+
+    @if (IsSectionDefined("ScriptSection"))
+    {
+        @RenderSection("ScriptSection", required: false)
+    }
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+        function samplepageload() {
+            $("#controlarea").css('visibility', 'visible');
+            $(".deskmob").css('visibility', 'visible');
+        }
+    </script>
 </body>
 </html>

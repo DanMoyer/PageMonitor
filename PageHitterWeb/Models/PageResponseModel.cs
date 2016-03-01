@@ -8,8 +8,8 @@ namespace PageHitterWeb.Models
 		public string Url { get; set; }
 		public double ResponseTime { get; set; }
 
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss tt}", ApplyFormatInEditMode = true)]
 
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss tt}", ApplyFormatInEditMode = true)]
 		public DateTime Created { get; set; }
 
 		public string Status { get; set; }

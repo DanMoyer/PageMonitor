@@ -16,6 +16,18 @@ namespace PageMonitorRepository.Monitor
 						.ToList();
 		}
 
+		public List<PageStatus> GetPageStatusesByDate(string startDate, string endDate)
+		{
+			var startTime = DateTime.Parse(startDate);
+			var endTime = DateTime.Parse(endDate);
+
+			return DbSet
+				.OrderByDescending(r => r.Id)
+				.Where(r => r.Created >= startTime)
+				.Where(r => r.Created <= endTime)
+				.ToList();
+		}
+
 		public List<double> GetPageStatusByDate(string startDate, string endDate, string url)
 		{
 			var responseTimes = new List<double>();
