@@ -171,12 +171,29 @@ namespace PageHitterWeb.Controllers
 
 			UpdateModel(model);
 
+			if (model.ButtonClicked == "grid")
+			{
+				//The URL should come from a selection in the UI.
+				//hardcode here for debugging
+				model.Url = "https://www.findlay.edu";
+
+				return RedirectToAction("Index", "Grid", model);
+			}
+
+			return RedirectToAction("Grid", model);
+		}
+
+
+		public ActionResult Grid(ChartViewModel model)
+		{
+
 			//The URL should come from a selection in the UI.
 			//hardcode here for debugging
 			model.Url = "https://www.findlay.edu";
-			
+
 			return RedirectToAction("Index", model);
 		}
+
 
 
 		private System.Web.UI.DataVisualization.Charting.Chart GetChart2(string[] xValues, string[] yValues, string url)

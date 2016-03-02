@@ -12,5 +12,7 @@ namespace PageHitterWeb.Models
 
 		[DataType(DataType.DateTime)]
 		public DateTime EndDate { get; set; }
+
+		public string ButtonClicked { get; set; }
 	}
 }

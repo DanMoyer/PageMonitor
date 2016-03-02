@@ -14,7 +14,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
+        <div class="form-group col-md-2">
             @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "control-label col-md-4"})
             <div class="col-md-10">
                 @Html.TextBox("StartDate", Model.StartDate.ToShortDateString(), new { style = "width:150px", @class = "form-control datepicker" })
@@ -34,32 +34,61 @@
         </div>*@
 
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="form-group  col-md-4">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "control-label col-md-4"})
             <div class="col-md-10">
-                @Html.TextBox("EndDate", Model.EndDate.ToShortDateString(), new { style = "width:150px", @class = "form-control datepicker" })
+                @Html.TextBox("EndDate", Model.EndDate.ToShortDateString(), new {style = "width:150px", @class = "form-control datepicker"})
 
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new {@class = "text-danger"})
             </div>
         </div>
-    <br/><br/><br /><br /><br /><br />
-        <div class="form-group">
-            <div class="col-md-offset-0 col-md-2">
-                <input type="submit" value="Show Chart" class="btn btn-default" />
+
+        @Html.HiddenFor(x => x.ButtonClicked, new { id = "hdnButtonClicked" })
+        <br/><br/><br/>
+
+        <div class="form-group col-md-2">
+            <div class="control-label  col-md-8">
+                @Html.ActionLink("Show Chart", "Report", "Report", null, new {@class = "btn btn-primary chartButton", onclick = "return false;"})
             </div>
         </div>
+
+        <div class="form-group col-md-4">
+            <div class="control-label col-md-2">
+                @Html.ActionLink("Show Grid", "Grid", "Report", null, new {@class = "btn btn-primary gridButton", onclick = "return false;"})
+            </div>
+        </div>
+        <br /><br /><br />
+        <div class="form-group col-md-4">
+            <div class="control-label col-md-4">
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+
+
     </div>
 }
-<br /><br />
-<div class="col-md-offset-0 col-md-2">
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-    $('.datepicker').datepicker(); //Initialise any date pickers
+        $('.datepicker').datepicker(); //Initialise any date pickers
+
+
+        $(document).ready(function () {
+            $('.chartButton').click(function () {
+                $("#hdnButtonClicked").val("chart");
+                $(this).closest('form')[0].submit();
+            });
+
+            $('.gridButton').click(function () {
+                $("#hdnButtonClicked").val("grid");
+                $(this).closest('form')[0].submit();
+            });
+        });
+
+
     </script>
 }

@@ -77,21 +77,16 @@ namespace PageHitterWeb.Controllers
 			var owinContext = HttpContext.GetOwinContext();
 			var iden = owinContext.Authentication.User.Identities.ToList();
 
-			string name;
-
 			if (iden.Any())
 			{
 				var authenticated = iden.First().IsAuthenticated;
 
 				if (authenticated)
 				{
-					name = iden.First().Name;
 				}
-
 			}
 
 			var isAuthenticated = owinContext.Request.User.Identity.IsAuthenticated;
-			name = owinContext.Request.User.Identity.Name;
 			var userName = owinContext.Request.User.Identity.GetUserName();
 
 			var isAdmin = owinContext.Request.User.IsInRole("admin");
