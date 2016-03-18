@@ -4,7 +4,7 @@
     ViewBag.Title = "Report";
 }
 
-<h2>Report</h2>
+<h2 class="ms-font-xxl   ms-fontWeight-semibold">Report</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -15,7 +15,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group col-md-2">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "control-label col-md-4"})
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new {@class = "  ms-fontWeight-semibold col-md-4" })
             <div class="col-md-10">
                 @Html.TextBox("StartDate", Model.StartDate.ToShortDateString(), new { style = "width:150px", @class = "form-control datepicker" })
 
@@ -35,7 +35,7 @@
 
 
         <div class="form-group  col-md-4">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "control-label col-md-4"})
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new {@class = "  ms-fontWeight-semibold col-md-4" })
             <div class="col-md-10">
                 @Html.TextBox("EndDate", Model.EndDate.ToShortDateString(), new {style = "width:150px", @class = "form-control datepicker"})
 
@@ -44,17 +44,19 @@
         </div>
 
         @Html.HiddenFor(x => x.ButtonClicked, new { id = "hdnButtonClicked" })
-        <br/><br/><br/>
 
-        <div class="form-group col-md-2">
-            <div class="control-label  col-md-8">
-                @Html.ActionLink("Show Chart", "Report", "Report", null, new {@class = "btn btn-primary chartButton", onclick = "return false;"})
+        
+        <br/><br/><br/><br/>
+        
+        <div class="form-group col-md-6">
+            <div class="control-label  col-md-4">
+                @Html.ActionLink("Show Chart", "Report", "Report", null, new {@class = "ms-Button ms-Button--primary chartButton", style = "line-height: 0px; display: inline; color: white", onclick = "return false;"})
             </div>
-        </div>
+        @*</div>
 
-        <div class="form-group col-md-4">
-            <div class="control-label col-md-2">
-                @Html.ActionLink("Show Grid", "Grid", "Report", null, new {@class = "btn btn-primary gridButton", onclick = "return false;"})
+        <div class="form-group col-md-4">*@
+            <div class="control-label col-md-4">
+                @Html.ActionLink("Show Grid", "Grid", "Report", null, new {@class = "ms-Button ms-Button--primary gridButton", style = "margin-left: 10px; line-height: 0px; display: inline; color: white", onclick = "return false;"})
             </div>
         </div>
         <br /><br /><br />

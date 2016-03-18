@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+
+    <!-- Fabric core -->
+    <link href="~/Content/fabric.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/fabric.components.css" type="text/css" rel="stylesheet"/>
+    <link href="~/Content/app.css" type="text/css" rel="stylesheet"/>
+
+
     @Styles.Render("~/Content/css")
     @RenderSection("StyleSection", required: false)    
     @Scripts.Render("~/bundles/jquery")
@@ -17,91 +24,124 @@
     @RenderSection("ScriptReferenceSection", required: false) 
 </head>
 <body onload="samplepageload()">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
-                    @*<li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>*@
-                    <li>@Html.ActionLink("PageTimes", "ShowPageTimes", "ResponseTimes", new {area = ""}, null)</li>
-                    <li>@Html.ActionLink("Report", "Report", "Report", new { area = "" }, null)</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+
+@*
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Application name", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
+                @*<li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>
+                <li>@Html.ActionLink("PageTimes", "ShowPageTimes", "ResponseTimes", new {area = ""}, null)</li>
+                <li>@Html.ActionLink("Report", "Report", "Report", new {area = ""}, null)</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
+</div>
+*@
 
-        @RenderBody()
 
-        @if (IsSectionDefined("ControlsSection"))
-        {
-            <div class="cols-iframe">
-                @Html.EJ().Button("slidepanel").Type(ButtonType.Button).ContentType(ContentType.ImageOnly).PrefixIcon("slidepanel-nav").ClientSideEvents(ce => ce.Click("ShowPanelClick")).ShowRoundedCorner(true).Width("45px").Height("45px").CssClass("slidemenuicon")
-               <br/>&nbsp
-                @if (IsSectionDefined("SampleHeading"))
-                {
-                    <div>
-                        <div class="sampleheadingtext">
-                            @RenderSection("SampleHeading", required: false)
-                        </div>
-                    </div>
-                }
+    <div class="ms-NavBar">
+        <div class="ms-NavBar-openMenu js-openMenu">
+            <i class="ms-Icon ms-Icon--menu"></i>
+        </div>
+        <ul class="ms-NavBar-items">
+
+            <li class="ms-NavBar-item">
+                @*@Html.ActionLink("Home", "Index", "Home", new {area = ""}, new {@class = "ms-NavBar-link"})*@
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "ms-NavBar-link ms-Button ms-Button--primary", style = "line-height: 0px; display: inline; color: white" })
+            </li>
+
+            <li class="ms-NavBar-item">
+                @Html.ActionLink("PageTimes", "ShowPageTimes", "ResponseTimes", new {area = ""}, new {@class = "ms-NavBar-link ms-Button ms-Button--primary", style = "line-height: 0px; display: inline; color: white"})
+            </li>
+
+            <li class="ms-NavBar-item">
+                @Html.ActionLink("Report", "Report", "Report", new {area = ""}, new {@class = "ms-NavBar-link ms-Button ms-Button--primary", style = "line-height: 0px; display: inline; color: white" })
+            </li>
+        </ul>
+        @Html.Partial("_LoginPartial")
+    </div>
+
+
+
+
+<div class="container body-content">
+
+    @RenderBody()
+
+    @if (IsSectionDefined("ControlsSection"))
+    {
+        <div class="cols-iframe">
+            @Html.EJ().Button("slidepanel").Type(ButtonType.Button).ContentType(ContentType.ImageOnly).PrefixIcon("slidepanel-nav").ClientSideEvents(ce => ce.Click("ShowPanelClick")).ShowRoundedCorner(true).Width("45px").Height("45px").CssClass("slidemenuicon")
+            <br/>&nbsp
+            @if (IsSectionDefined("SampleHeading"))
+            {
                 <div>
-                    <div id="samplefile" class="sample-container">
-                        <div>
-                            <div class="content-container-fluid">
-                                <div class="row">
-                                    <div class="cols-sample-area">
-                                        @RenderSection("ControlsSection", required: false)
-                                    </div>
-                                    @if (IsSectionDefined("PropertiesSection"))
-                                    {
-                                        <div id="sampleProperties">
-                                            <div class="prop-grid keyboard">
-                                                @RenderSection("PropertiesSection", required: false)
-                                            </div>
-                                        </div>
-                                    }
+                    <div class="sampleheadingtext">
+                        @RenderSection("SampleHeading", required: false)
+                    </div>
+                </div>
+            }
+            <div>
+                <div id="samplefile" class="sample-container">
+                    <div>
+                        <div class="content-container-fluid">
+                            <div class="row">
+                                <div class="cols-sample-area">
+                                    @RenderSection("ControlsSection", required: false)
                                 </div>
+                                @if (IsSectionDefined("PropertiesSection"))
+                                {
+                                    <div id="sampleProperties">
+                                        <div class="prop-grid keyboard">
+                                            @RenderSection("PropertiesSection", required: false)
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-
-
-       <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - Page Monitor Application</p>
-            </footer>
-    </div>
-
-    @Html.EJ().ScriptManager()
-
-    @if (IsSectionDefined("ScriptSection"))
-    {
-        @RenderSection("ScriptSection", required: false)
+        </div>
     }
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
 
-    <script>
-        function samplepageload() {
-            $("#controlarea").css('visibility', 'visible');
-            $(".deskmob").css('visibility', 'visible');
-        }
-    </script>
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Page Monitor Application</p>
+    </footer>
+</div>
+
+@Html.EJ().ScriptManager()
+
+@if (IsSectionDefined("ScriptSection"))
+{
+    @RenderSection("ScriptSection", required: false)
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+
+<script src="~/Scripts/OfficeNavBarPlugin.js" language="javascript" type="text/javascript"></script>
+
+
+<script>
+    function samplepageload() {
+        $("#controlarea").css('visibility', 'visible');
+        $(".deskmob").css('visibility', 'visible');
+    }
+</script>
 </body>
 </html>

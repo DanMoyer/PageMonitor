@@ -317,6 +317,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />
@@ -667,6 +668,11 @@
     <Content Include="Content\ej\web\responsive-css\ej.responsive.css" />
     <Content Include="Content\ej\web\responsive-css\ejgrid.responsive.css" />
     <Content Include="Content\ej\web\ribbon-css\ej.icons.css" />
+    <Content Include="Content\fabric.components.css" />
+    <Content Include="Content\fabric.css" />
+    <Content Include="Content\Images\ITS_Formal Secondary Logo %28Web%29_Black  Cool Gray.jpg" />
+    <Content Include="Content\Images\ITS_Formal Secondary Logo %28Web%29_Black  Orange.png" />
+    <Content Include="Content\Images\ITS_Formal Secondary Logo %28Web%29_Black.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -1379,6 +1385,7 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\OfficeNavBarPlugin.js" />
     <Content Include="Scripts\properties.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />

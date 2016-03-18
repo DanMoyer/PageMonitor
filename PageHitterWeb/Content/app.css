@@ -1,0 +1,47 @@
+﻿html,
+body {
+    margin: 0;
+}
+
+.TodoBar {
+  position:  inherit /* This bar should always be fixed to the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 2;
+ background-color: #0078D7; /* New Background Color */
+}
+
+.TodoList {
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  min-height: 200px;
+}
+
+.ListHeader {
+  width: 100%;
+  height: auto;
+  margin-top: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.ms-TextField .ms-TextField-field {
+  margin-top: 14px;
+}
+
+
+
+
+/* override bootstrap css behavior  
+    http://stackoverflow.com/questions/1935820/set-ahover-based-on-class
+*/
+.ms-NavBar-item a.ms-NavBar-link:hover,
+.ms-NavBar-item a.ms-NavBar-link:focus {
+  color: #2a6496;
+  text-decoration: none;
+}
+
